@@ -299,12 +299,12 @@
       <div class="permissions-form">
         <h4>专家权限配置</h4>
         <el-checkbox-group v-model="expertPermissions">
-          <el-checkbox label="consultation">法律咨询解答</el-checkbox>
-          <el-checkbox label="course">课程讲解</el-checkbox>
-          <el-checkbox label="activity">活动发起</el-checkbox>
-          <el-checkbox label="article">文章发布</el-checkbox>
-          <el-checkbox label="review">内容审核</el-checkbox>
-          <el-checkbox label="mentor">专业指导</el-checkbox>
+          <el-checkbox label="consultation" value="consultation">法律咨询解答</el-checkbox>
+          <el-checkbox label="course" value="course">课程讲解</el-checkbox>
+          <el-checkbox label="activity" value="activity">活动发起</el-checkbox>
+          <el-checkbox label="article" value="article">文章发布</el-checkbox>
+          <el-checkbox label="review" value="review">内容审核</el-checkbox>
+          <el-checkbox label="mentor" value="mentor">专业指导</el-checkbox> 
         </el-checkbox-group>
       </div>
       

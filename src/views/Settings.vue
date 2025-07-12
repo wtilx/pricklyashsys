@@ -85,19 +85,19 @@
             <el-form :model="securitySettings" label-width="150px">
               <el-form-item label="密码强度要求">
                 <el-checkbox-group v-model="securitySettings.passwordRequirements">
-                  <el-checkbox label="minLength">最少8位字符</el-checkbox>
-                  <el-checkbox label="uppercase">包含大写字母</el-checkbox>
-                  <el-checkbox label="lowercase">包含小写字母</el-checkbox>
-                  <el-checkbox label="numbers">包含数字</el-checkbox>
-                  <el-checkbox label="symbols">包含特殊字符</el-checkbox>
+                  <el-checkbox label="minLength" value="minLength8">最少8位字符</el-checkbox>
+                  <el-checkbox label="uppercase" value="uppercase">包含大写字母</el-checkbox>
+                  <el-checkbox label="lowercase" value="lowercase">包含小写字母</el-checkbox>
+                  <el-checkbox label="numbers" value="numbers">包含数字</el-checkbox>
+                  <el-checkbox label="symbols" value="symbols">包含特殊字符</el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
               <el-form-item label="登录验证方式">
                 <el-checkbox-group v-model="securitySettings.loginVerification">
-                  <el-checkbox label="sms">短信验证</el-checkbox>
-                  <el-checkbox label="email">邮箱验证</el-checkbox>
-                  <el-checkbox label="captcha">图形验证码</el-checkbox>
-                  <el-checkbox label="twoFactor">双因子认证</el-checkbox>
+                  <el-checkbox label="sms" value="sms">短信验证</el-checkbox>
+                  <el-checkbox label="email" value="email">邮箱验证</el-checkbox>
+                  <el-checkbox label="captcha" value="captcha">图形验证码</el-checkbox>
+                  <el-checkbox label="twoFactor" value="twoFactor">双因子认证</el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
               <el-form-item label="会话超时时间">
@@ -152,11 +152,11 @@
               </el-form-item>
               <el-form-item label="允许的文件类型">
                 <el-checkbox-group v-model="contentSecurity.allowedFileTypes">
-                  <el-checkbox label="pdf">PDF</el-checkbox>
-                  <el-checkbox label="doc">DOC/DOCX</el-checkbox>
-                  <el-checkbox label="image">图片</el-checkbox>
-                  <el-checkbox label="video">视频</el-checkbox>
-                  <el-checkbox label="audio">音频</el-checkbox>
+                  <el-checkbox label="pdf" value="pdf">PDF</el-checkbox>
+                  <el-checkbox label="doc" value="doc">DOC/DOCX</el-checkbox>
+                  <el-checkbox label="image" value="image">图片</el-checkbox>
+                  <el-checkbox label="video" value="video">视频</el-checkbox>
+                  <el-checkbox label="audio" value="audio">音频</el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
               <el-form-item>

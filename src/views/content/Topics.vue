@@ -148,10 +148,10 @@
         </el-form-item>
         <el-form-item label="讨论规则">
           <el-checkbox-group v-model="form.rules">
-            <el-checkbox label="实名讨论">实名讨论</el-checkbox>
-            <el-checkbox label="禁止匿名">禁止匿名</el-checkbox>
-            <el-checkbox label="需要审核">回复需要审核</el-checkbox>
-            <el-checkbox label="专家优先">专家回复优先显示</el-checkbox>
+            <el-checkbox label="实名讨论" value="实名讨论">实名讨论</el-checkbox>
+            <el-checkbox label="禁止匿名" value="禁止匿名">禁止匿名</el-checkbox>
+            <el-checkbox label="需要审核" value="需要审核">回复需要审核</el-checkbox>
+            <el-checkbox label="专家优先" value="专家优先">专家回复优先显示</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-form>
