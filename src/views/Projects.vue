@@ -55,7 +55,7 @@
                 <div class="project-name">{{ row.name }}</div>
                 <div class="project-description">{{ row.description }}</div>
                 <div class="project-meta">
-                  <el-tag :type="getTypeColor(row.type)" size="small">
+                  <el-tag :type="getTypeColor(row.type) || 'primary'" size="small">
                     {{ getTypeName(row.type) }}
                   </el-tag>
                   <span class="project-leader">负责人：{{ row.leader }}</span>
@@ -77,7 +77,7 @@
         </el-table-column>
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)">
+            <el-tag :type="getStatusType(row.status) || 'primary'">
               {{ getStatusName(row.status) }}
             </el-tag>
           </template>
@@ -274,7 +274,7 @@
               <h4>{{ milestone.title }}</h4>
               <p>{{ milestone.description }}</p>
               <div class="milestone-actions">
-                <el-tag :type="getMilestoneStatusType(milestone.status)">
+                <el-tag :type="getMilestoneStatusType(milestone.status) || 'primary'">
                   {{ getMilestoneStatusName(milestone.status) }}
                 </el-tag>
                 <el-button 
@@ -310,7 +310,7 @@
           <el-table-column prop="name" label="姓名" width="120" />
           <el-table-column prop="role" label="角色" width="120">
             <template #default="{ row }">
-              <el-tag :type="getRoleType(row.role)">
+              <el-tag :type="getRoleType(row.role) || 'primary'">
                 {{ getRoleName(row.role) }}
               </el-tag>
             </template>
@@ -320,7 +320,7 @@
           <el-table-column prop="joinDate" label="加入时间" width="120" />
           <el-table-column prop="status" label="状态" width="100">
             <template #default="{ row }">
-              <el-tag :type="getParticipantStatusType(row.status)">
+              <el-tag :type="getParticipantStatusType(row.status) || 'primary'">
                 {{ getParticipantStatusName(row.status) }}
               </el-tag>
             </template>

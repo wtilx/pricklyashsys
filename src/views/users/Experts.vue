@@ -67,7 +67,7 @@
         </el-table-column>
         <el-table-column prop="field" label="专业领域" width="120">
           <template #default="{ row }">
-            <el-tag :type="getFieldType(row.field)">
+            <el-tag :type="getFieldType(row.field) || 'primary'">
               {{ getFieldName(row.field) }}
             </el-tag>
           </template>
@@ -88,7 +88,7 @@
         <el-table-column prop="courses" label="课程数" width="80" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)" :icon="getStatusIcon(row.status)">
+            <el-tag :type="getStatusType(row.status) || 'primary'" :icon="getStatusIcon(row.status)">
               {{ getStatusName(row.status) }}
             </el-tag>
           </template>

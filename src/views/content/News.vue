@@ -50,7 +50,7 @@
         <el-table-column prop="title" label="标题" min-width="200" show-overflow-tooltip />
         <el-table-column prop="category" label="分类" width="120">
           <template #default="{ row }">
-            <el-tag :type="getCategoryType(row.category)">
+            <el-tag :type="getCategoryType(row.category) || 'primary'" >
               {{ getCategoryName(row.category) }}
             </el-tag>
           </template>
@@ -59,7 +59,7 @@
         <el-table-column prop="views" label="阅读量" width="100" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)">
+            <el-tag :type="getStatusType(row.status) || 'primary'">
               {{ getStatusName(row.status) }}
             </el-tag>
           </template>

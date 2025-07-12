@@ -51,7 +51,7 @@
               <div class="question-title">{{ row.title }}</div>
               <div class="question-user">提问者：{{ row.userName }}</div>
               <div class="question-meta">
-                <el-tag :type="getCategoryType(row.category)" size="small">
+                <el-tag :type="getCategoryType(row.category) || 'primary'" size="small">
                   {{ getCategoryName(row.category) }}
                 </el-tag>
                 <span class="question-views">{{ row.views }}次浏览</span>
@@ -63,7 +63,7 @@
         <el-table-column prop="likes" label="点赞数" width="80" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)">
+            <el-tag :type="getStatusType(row.status) || 'primary'">
               {{ getStatusName(row.status) }}
             </el-tag>
           </template>
@@ -120,12 +120,12 @@
           <el-descriptions-item label="问题标题">{{ selectedQuestion.title }}</el-descriptions-item>
           <el-descriptions-item label="提问者">{{ selectedQuestion.userName }}</el-descriptions-item>
           <el-descriptions-item label="分类">
-            <el-tag :type="getCategoryType(selectedQuestion.category)">
+            <el-tag :type="getCategoryType(selectedQuestion.category) || 'primary'">
               {{ getCategoryName(selectedQuestion.category) }}
             </el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="状态">
-            <el-tag :type="getStatusType(selectedQuestion.status)">
+            <el-tag :type="getStatusType(selectedQuestion.status) || 'primary'">
               {{ getStatusName(selectedQuestion.status) }}
             </el-tag>
           </el-descriptions-item>
@@ -183,7 +183,7 @@
           </el-table-column>
           <el-table-column prop="status" label="状态" width="100">
             <template #default="{ row }">
-              <el-tag :type="getAnswerStatusType(row.status)">
+              <el-tag :type="getAnswerStatusType(row.status) || 'primary'">
                 {{ getAnswerStatusName(row.status) }}
               </el-tag>
             </template>

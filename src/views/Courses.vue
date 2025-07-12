@@ -65,7 +65,7 @@
         </el-table-column>
         <el-table-column prop="field" label="专业领域" width="120">
           <template #default="{ row }">
-            <el-tag :type="getFieldType(row.field)">
+            <el-tag :type="getFieldType(row.field)  || 'primary'">
               {{ getFieldName(row.field) }}
             </el-tag>
           </template>
@@ -89,7 +89,7 @@
         </el-table-column>
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)">
+            <el-tag :type="getStatusType(row.status) || 'primary'">
               {{ getStatusName(row.status) }}
             </el-tag>
           </template>
@@ -258,7 +258,7 @@
           <el-table-column prop="title" label="章节标题" min-width="200" />
           <el-table-column prop="type" label="类型" width="100">
             <template #default="{ row }">
-              <el-tag :type="getContentType(row.type)">
+              <el-tag :type="getContentType(row.type) || 'primary'">
                 {{ getContentTypeName(row.type) }}
               </el-tag>
             </template>

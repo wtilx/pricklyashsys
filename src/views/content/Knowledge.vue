@@ -73,7 +73,7 @@
                 <el-table-column prop="title" label="标题" min-width="200" show-overflow-tooltip />
                 <el-table-column prop="type" label="类型" width="100">
                   <template #default="{ row }">
-                    <el-tag :type="getTypeColor(row.type)">
+                    <el-tag :type="getTypeColor(row.type) || 'primary'">
                       {{ getTypeName(row.type) }}
                     </el-tag>
                   </template>

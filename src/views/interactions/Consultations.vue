@@ -79,10 +79,10 @@
               <div class="consultation-title">{{ row.title }}</div>
               <div class="consultation-user">咨询人：{{ row.userName }}</div>
               <div class="consultation-meta">
-                <el-tag :type="getFieldType(row.field)" size="small">
+                <el-tag :type="getFieldType(row.field) || 'primary'" size="small">
                   {{ getFieldName(row.field) }}
                 </el-tag>
-                <el-tag :type="getPriorityType(row.priority)" size="small">
+                <el-tag :type="getPriorityType(row.priority) || 'primary'" size="small">
                   {{ getPriorityName(row.priority) }}
                 </el-tag>
               </div>
@@ -92,7 +92,7 @@
         <el-table-column prop="expert" label="分配专家" width="120" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)">
+            <el-tag :type="getStatusType(row.status) || 'primary'">
               {{ getStatusName(row.status) }}
             </el-tag>
           </template>
@@ -169,12 +169,12 @@
           <el-descriptions-item label="咨询人">{{ selectedConsultation.userName }}</el-descriptions-item>
           <el-descriptions-item label="联系方式">{{ selectedConsultation.userPhone }}</el-descriptions-item>
           <el-descriptions-item label="专业领域">
-            <el-tag :type="getFieldType(selectedConsultation.field)">
+            <el-tag :type="getFieldType(selectedConsultation.field) || 'primary'">
               {{ getFieldName(selectedConsultation.field) }}
             </el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="紧急程度">
-            <el-tag :type="getPriorityType(selectedConsultation.priority)">
+            <el-tag :type="getPriorityType(selectedConsultation.priority) || 'primary'">
               {{ getPriorityName(selectedConsultation.priority) }}
             </el-tag>
           </el-descriptions-item>
@@ -525,7 +525,7 @@ const handleConfirmAssign = () => {
     return
   }
   
-  const expert = availableExperts.value.find(e => e.id === assignForm.expertId)
+  const expert = availableExperts.value.find(e => e.id === Number(assignForm.expertId))
   if (selectedConsultation.value && expert) {
     selectedConsultation.value.expert = expert.name
     selectedConsultation.value.status = 'assigned'

@@ -88,7 +88,7 @@
         <el-table-column prop="email" label="邮箱" width="180" show-overflow-tooltip />
         <el-table-column prop="level" label="会员等级" width="120">
           <template #default="{ row }">
-            <el-tag :type="getLevelType(row.level)" :icon="getLevelIcon(row.level)">
+            <el-tag :type="getLevelType(row.level) || 'primary'" :icon="getLevelIcon(row.level)">
               {{ getLevelName(row.level) }}
             </el-tag>
           </template>
@@ -98,7 +98,7 @@
         <el-table-column prop="lastLogin" label="最后登录" width="150" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)">
+            <el-tag :type="getStatusType(row.status) || 'primary'">
               {{ getStatusName(row.status) }}
             </el-tag>
           </template>
@@ -203,7 +203,7 @@
           <el-descriptions-item label="手机号">{{ selectedMember.phone }}</el-descriptions-item>
           <el-descriptions-item label="邮箱">{{ selectedMember.email }}</el-descriptions-item>
           <el-descriptions-item label="会员等级">
-            <el-tag :type="getLevelType(selectedMember.level)">
+            <el-tag :type="getLevelType(selectedMember.level) || 'primary'">
               {{ getLevelName(selectedMember.level) }}
             </el-tag>
           </el-descriptions-item>
@@ -212,7 +212,7 @@
           <el-descriptions-item label="最后登录">{{ selectedMember.lastLogin }}</el-descriptions-item>
           <el-descriptions-item label="注册时间">{{ selectedMember.registerTime }}</el-descriptions-item>
           <el-descriptions-item label="状态">
-            <el-tag :type="getStatusType(selectedMember.status)">
+            <el-tag :type="getStatusType(selectedMember.status) || 'primary'">
               {{ getStatusName(selectedMember.status) }}
             </el-tag>
           </el-descriptions-item>

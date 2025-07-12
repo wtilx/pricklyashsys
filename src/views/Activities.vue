@@ -61,7 +61,7 @@
         </el-table-column>
         <el-table-column prop="type" label="类型" width="100">
           <template #default="{ row }">
-            <el-tag :type="getTypeColor(row.type)">
+            <el-tag :type="getTypeColor(row.type) || 'primary'">
               {{ getTypeName(row.type) }}
             </el-tag>
           </template>
@@ -73,7 +73,7 @@
         <el-table-column prop="attendedCount" label="实际参与" width="100" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)">
+            <el-tag :type="getStatusType(row.status) || 'primary'">
               {{ getStatusName(row.status) }}
             </el-tag>
           </template>
@@ -213,10 +213,10 @@
 
         <el-form-item label="参与要求">
           <el-checkbox-group v-model="form.requirements">
-            <el-checkbox label="实名报名">实名报名</el-checkbox>
-            <el-checkbox label="需要审核">需要审核</el-checkbox>
-            <el-checkbox label="会员专享">会员专享</el-checkbox>
-            <el-checkbox label="专业限制">专业限制</el-checkbox>
+            <el-checkbox label="实名报名" value="实名报名">实名报名</el-checkbox>
+            <el-checkbox label="需要审核" value="需要审核">需要审核</el-checkbox>
+            <el-checkbox label="会员专享" value="会员专享">会员专享</el-checkbox>
+            <el-checkbox label="专业限制" value="专业限制">专业限制</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
 
@@ -282,7 +282,7 @@
         <el-table-column prop="registrationTime" label="报名时间" width="150" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="getParticipantStatusType(row.status)">
+            <el-tag :type="getParticipantStatusType(row.status)  || 'primary'">
               {{ getParticipantStatusName(row.status) }}
             </el-tag>
           </template>
