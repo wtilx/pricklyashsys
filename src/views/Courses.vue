@@ -227,9 +227,9 @@
 
         <el-form-item label="课程状态" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio label="draft">草稿</el-radio>
-            <el-radio label="pending">待审核</el-radio>
-            <el-radio label="published">已发布</el-radio>
+            <el-radio label="draft" value="draft">草稿</el-radio>
+            <el-radio label="pending" value="pending">待审核</el-radio>
+            <el-radio label="published" value="published">已发布</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>

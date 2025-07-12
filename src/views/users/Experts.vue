@@ -205,9 +205,9 @@
 
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio label="online">在线</el-radio>
-            <el-radio label="busy">忙碌</el-radio>
-            <el-radio label="offline">离线</el-radio>
+            <el-radio label="online" value="online">在线</el-radio>
+            <el-radio label="busy" value="busy">忙碌</el-radio>
+            <el-radio label="offline" value="offline">离线</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>

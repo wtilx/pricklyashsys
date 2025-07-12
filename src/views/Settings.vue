@@ -141,9 +141,9 @@
               </el-form-item>
               <el-form-item label="内容审核">
                 <el-radio-group v-model="contentSecurity.contentReview">
-                  <el-radio label="auto">自动审核</el-radio>
-                  <el-radio label="manual">人工审核</el-radio>
-                  <el-radio label="mixed">混合审核</el-radio>
+                  <el-radio label="auto" value="auto">自动审核</el-radio>
+                  <el-radio label="manual" value="manual">人工审核</el-radio>
+                  <el-radio label="mixed" value="mixed">混合审核</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="文件上传限制">

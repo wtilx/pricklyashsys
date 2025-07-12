@@ -141,9 +141,9 @@
         </el-form-item>
         <el-form-item label="话题状态" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio label="active">进行中</el-radio>
-            <el-radio label="closed">已结束</el-radio>
-            <el-radio label="pinned">置顶</el-radio>
+            <el-radio label="active" value="active">进行中</el-radio>
+            <el-radio label="closed" value="closed">已结束</el-radio>
+            <el-radio label="pinned" value="pinned">置顶</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="讨论规则">

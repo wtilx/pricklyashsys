@@ -167,9 +167,9 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio label="active">正常</el-radio>
-            <el-radio label="disabled">禁用</el-radio>
-            <el-radio label="frozen">冻结</el-radio>
+            <el-radio label="active" value="active">正常</el-radio>
+            <el-radio label="disabled" value="disabled">禁用</el-radio>
+            <el-radio label="frozen" value="frozen">冻结</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">

@@ -212,10 +212,10 @@
 
         <el-form-item label="项目状态" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio label="ongoing">进行中</el-radio>
-            <el-radio label="paused">已暂停</el-radio>
-            <el-radio label="completed">已完成</el-radio>
-            <el-radio label="cancelled">已取消</el-radio>
+            <el-radio label="ongoing" value="ongoing">进行中</el-radio>
+            <el-radio label="paused" value="paused">已暂停</el-radio>
+            <el-radio label="completed" value="completed">已完成</el-radio>
+            <el-radio label="cancelled" value="cancelled">已取消</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
