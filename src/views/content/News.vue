@@ -50,7 +50,7 @@
         <el-table-column prop="title" label="标题" min-width="200" show-overflow-tooltip />
         <el-table-column prop="category" label="分类" width="120">
           <template #default="{ row }">
-            <el-tag :type="getCategoryType(row.category) || 'primary'" >
+            <el-tag :type="getCategoryType(row.category)">
               {{ getCategoryName(row.category) }}
             </el-tag>
           </template>
@@ -234,13 +234,14 @@ const getCategoryName = (category: string) => {
 }
 
 const getCategoryType = (category: string) => {
-  const map: Record<string, string> = {
-    civil: 'primary',
-    criminal: 'danger',
-    administrative: 'warning',
-    intellectual: 'success'
+  const typeMap: Record<string, string> = {
+    '通知': 'primary',
+    '案例': 'success',
+    '法规': 'warning',
+    '解读': 'info',
+    '更新': 'danger'
   }
-  return map[category] || ''
+  return typeMap[category] || 'primary'
 }
 
 const getStatusName = (status: string) => {

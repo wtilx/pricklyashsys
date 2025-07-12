@@ -126,12 +126,12 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="活动名称" prop="name">
-              <el-input v-model="form.name" placeholder="请输入活动名称" />
+              <el-input v-model="form.name" id="activityName" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="活动类型" prop="type">
-              <el-select v-model="form.type" placeholder="请选择活动类型">
+              <el-select v-model="form.type" id="activityType">
                 <el-option label="线上活动" value="online" />
                 <el-option label="线下活动" value="offline" />
                 <el-option label="混合活动" value="hybrid" />
@@ -183,7 +183,7 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="活动地点" prop="location">
-              <el-input v-model="form.location" placeholder="请输入活动地点" />
+              <el-input v-model="form.location" id="activityLocation" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
