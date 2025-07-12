@@ -238,8 +238,8 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
-import { Plus, Search, Download, Star, Crown } from '@element-plus/icons-vue'
-
+import { Plus, Search, Download, Star } from '@element-plus/icons-vue'
+// Crown
 const loading = ref(false)
 const dialogVisible = ref(false)
 const detailsDialogVisible = ref(false)
@@ -393,7 +393,7 @@ const getLevelIcon = (level: string) => {
   const map: Record<string, any> = {
     normal: '',
     vip: Star,
-    svip: Crown
+    svip: Star
   }
   return map[level] || ''
 }

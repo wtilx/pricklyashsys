@@ -21,11 +21,10 @@
                 <el-icon><component :is="route.meta?.icon" /></el-icon>
                 <span>{{ route.meta?.title }}</span>
               </template>
-              <!--  :index="route.path + '/' + child.path" -->
               <el-menu-item
                 v-for="child in route.children"
                 :key="child.path"
-                :index="route.path + '/' + child.path"
+                :index="child.path"
               >
                 <el-icon><component :is="child.meta?.icon" /></el-icon>
                 <span>{{ child.meta?.title }}</span>
@@ -105,9 +104,10 @@ const isCollapse = ref(false)
 const currentRoute = computed(() => route)
 
 const menuRoutes = computed(() => {
-  return router.getRoutes().find(r => r.path === '/')?.children?.filter(child => child.meta?.title) || []
+  return router.getRoutes()
+    .find(r => r.path === '/')
+    ?.children?.filter(child => child.meta?.title) || []
 })
-console.log('menuRoutes',menuRoutes.value);
 
 const toggleCollapse = () => {
   isCollapse.value = !isCollapse.value
