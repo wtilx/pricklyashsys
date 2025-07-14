@@ -111,7 +111,8 @@ const handleLogin = async () => {
 <style scoped>
 .login-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: url('../assets/backimage.png') no-repeat;
+  background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;

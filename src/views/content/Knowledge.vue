@@ -83,7 +83,7 @@
                 <el-table-column prop="views" label="阅读量" width="80" />
                 <el-table-column prop="downloads" label="下载量" width="80" />
                 <el-table-column prop="updateTime" label="更新时间" width="150" />
-                <el-table-column label="操作" width="180" fixed="right">
+                <el-table-column label="操作" width="200" fixed="right">
                   <template #default="{ row }">
                     <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
                     <el-button type="info" size="small" @click="handlePreview(row)">预览</el-button>

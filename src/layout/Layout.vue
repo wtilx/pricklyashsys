@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <el-container>
+    <el-container style="height: 100%">
       <!-- 侧边栏 -->
       <el-aside :width="isCollapse ? '64px' : '240px'" class="sidebar">
         <div class="logo">
@@ -117,6 +117,7 @@ const handleCommand = (command: string) => {
   switch (command) {
     case 'profile':
       // 跳转到个人中心
+      router.push('/profile')
       break
     case 'settings':
       router.push('/settings')
@@ -160,7 +161,9 @@ const handleCommand = (command: string) => {
   font-weight: bold;
   margin-left: 12px;
 }
-
+.el-menu-item{
+  background: #001529;
+}
 .sidebar-menu {
   border: none;
   background: #001529;
