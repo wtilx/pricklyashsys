@@ -690,7 +690,7 @@ const handleAddParticipant = () => {
   ElMessage.info('添加成员功能开发中...')
 }
 
-const handleEditParticipant = (row: any) => {
+const handleEditParticipant = (_row: any) => {
   ElMessage.info('编辑成员功能开发中...')
 }
 

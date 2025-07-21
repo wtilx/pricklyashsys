@@ -462,7 +462,7 @@ const getStatusType = (status: string) => {
   return map[status] || ''
 }
 
-const getStatusIcon = (status: string) => {
+const getStatusIcon = (_status: string) => {
   // 返回对应的图标组件
   return ''
 }

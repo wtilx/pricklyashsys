@@ -570,11 +570,12 @@ const handleSavePermissions = () => {
   permissionsDialogVisible.value = false
 }
 
-const handleEditTemplate = (row: any) => {
+const handleEditTemplate = (_row: any) => {
   ElMessage.info('编辑模板功能开发中...')
 }
 
-const handlePreviewTemplate = (row: any) => {
+const handlePreviewTemplate = (_row: any) => {
+
   ElMessage.info('预览模板功能开发中...')
 }
 

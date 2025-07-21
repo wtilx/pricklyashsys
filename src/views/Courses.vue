@@ -632,11 +632,11 @@ const handleAddChapter = () => {
   ElMessage.info('添加章节功能开发中...')
 }
 
-const handleEditChapter = (row: any) => {
+const handleEditChapter = (_row: any) => {
   ElMessage.info('编辑章节功能开发中...')
 }
 
-const handlePreview = (row: any) => {
+const handlePreview = (_row: any) => {
   ElMessage.info('预览功能开发中...')
 }
 

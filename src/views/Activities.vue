@@ -555,7 +555,7 @@ const handleViewParticipants = (row: any) => {
   participantsDialogVisible.value = true
 }
 
-const handleNotify = (row: any) => {
+const handleNotify = (_row: any) => {
   ElMessage.success('通知发送成功')
 }
 

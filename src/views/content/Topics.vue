@@ -391,7 +391,7 @@ const handlePin = async (row: any) => {
   }
 }
 
-const handleManageReplies = (row: any) => {
+const handleManageReplies = (_row: any) => {
   repliesDialogVisible.value = true
 }
 

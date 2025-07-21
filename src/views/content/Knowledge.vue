@@ -30,7 +30,8 @@
                 :expand-on-click-node="false"
                 @node-click="handleCategoryClick"
               >
-                <template #default="{ node, data }">
+              <!-- node, -->
+                <template #default="{  data }">
                   <div class="category-node">
                     <span>{{ data.name }}</span>
                     <span class="category-count">({{ data.count }})</span>
@@ -452,7 +453,7 @@ const handleEdit = (row: any) => {
   dialogVisible.value = true
 }
 
-const handlePreview = (row: any) => {
+const handlePreview = (_row: any) => {
   ElMessage.info('预览功能开发中...')
 }
 
