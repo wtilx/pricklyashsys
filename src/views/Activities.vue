@@ -14,12 +14,7 @@
       <div class="search-bar">
         <el-form :model="searchForm" inline>
           <el-form-item label="活动名称">
-            <el-input
-              v-model="searchForm.name"
-              placeholder="请输入活动名称"
-              clearable
-              style="width: 200px"
-            />
+            <el-input v-model="searchForm.name" placeholder="请输入活动名称" clearable style="width: 200px" />
           </el-form-item>
           <el-form-item label="活动类型">
             <el-select v-model="searchForm.type" placeholder="请选择类型" clearable style="width: 120px">
@@ -73,9 +68,7 @@
         <el-table-column prop="attendedCount" label="实际参与" width="100" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status) || 'primary'">
-              {{ getStatusName(row.status) }}
-            </el-tag>
+            <el-tag :type="getStatusType(row.status) || 'primary'"> {{ getStatusName(row.status) }} </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="250" fixed="right">
@@ -83,14 +76,7 @@
             <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
             <el-button type="info" size="small" @click="handleViewParticipants(row)">参与者</el-button>
             <el-button type="success" size="small" @click="handleNotify(row)">通知</el-button>
-            <el-button 
-              v-if="row.status === 'registering'" 
-              type="warning" 
-              size="small" 
-              @click="handleCancel(row)"
-            >
-              取消
-            </el-button>
+            <el-button v-if="row.status === 'registering'" type="warning" size="small" @click="handleCancel(row)">取消</el-button>
             <el-button type="danger" size="small" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -98,31 +84,15 @@
 
       <!-- 分页 -->
       <div class="pagination">
-        <el-pagination
-          v-model:current-page="pagination.currentPage"
-          v-model:page-size="pagination.pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          :total="pagination.total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+        <el-pagination v-model:current-page="pagination.currentPage" v-model:page-size="pagination.pageSize"
+          :page-sizes="[10, 20, 50, 100]" :total="pagination.total" layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange" @current-change="handleCurrentChange" />
       </div>
     </el-card>
 
     <!-- 编辑对话框 -->
-    <el-dialog
-      v-model="dialogVisible"
-      :title="dialogTitle"
-      width="900px"
-      @close="handleDialogClose"
-    >
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        label-width="100px"
-      >
+    <el-dialog v-model="dialogVisible" :title="dialogTitle" width="900px" @close="handleDialogClose">
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="活动名称" prop="name">
@@ -160,22 +130,13 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="开始时间" prop="startTime">
-              <el-date-picker
-                v-model="form.startTime"
-                type="datetime"
-                placeholder="选择开始时间"
-                style="width: 100%"
-              />
+              <el-date-picker v-model="form.startTime" type="datetime" placeholder="选择开始时间" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="报名截止" prop="registrationDeadline">
-              <el-date-picker
-                v-model="form.registrationDeadline"
-                type="datetime"
-                placeholder="选择报名截止时间"
-                style="width: 100%"
-              />
+              <el-date-picker v-model="form.registrationDeadline" type="datetime" placeholder="选择报名截止时间"
+                style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -194,21 +155,11 @@
         </el-row>
 
         <el-form-item label="活动描述" prop="description">
-          <el-input
-            v-model="form.description"
-            type="textarea"
-            :rows="4"
-            placeholder="请输入活动描述"
-          />
+          <el-input v-model="form.description" type="textarea" :rows="4" placeholder="请输入活动描述" />
         </el-form-item>
 
         <el-form-item label="活动流程">
-          <el-input
-            v-model="form.agenda"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入活动流程安排"
-          />
+          <el-input v-model="form.agenda" type="textarea" :rows="3" placeholder="请输入活动流程安排" />
         </el-form-item>
 
         <el-form-item label="参与要求">
@@ -221,18 +172,15 @@
         </el-form-item>
 
         <el-form-item label="活动海报">
-          <el-upload
-            class="poster-uploader"
-            action="#"
-            :show-file-list="false"
-            :auto-upload="false"
-          >
+          <el-upload class="poster-uploader" action="#" :show-file-list="false" :auto-upload="false">
             <img v-if="form.poster" :src="form.poster" class="poster-preview" />
-            <el-icon v-else class="poster-uploader-icon"><Plus /></el-icon>
+            <el-icon v-else class="poster-uploader-icon">
+              <Plus />
+            </el-icon>
           </el-upload>
         </el-form-item>
       </el-form>
-      
+
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="handleSubmit">确定</el-button>
@@ -240,11 +188,7 @@
     </el-dialog>
 
     <!-- 参与者管理对话框 -->
-    <el-dialog
-      v-model="participantsDialogVisible"
-      title="参与者管理"
-      width="1000px"
-    >
+    <el-dialog v-model="participantsDialogVisible" title="参与者管理" width="1000px">
       <div class="participants-stats">
         <el-row :gutter="20">
           <el-col :span="6">
@@ -282,35 +226,22 @@
         <el-table-column prop="registrationTime" label="报名时间" width="150" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="getParticipantStatusType(row.status)  || 'primary'">
+            <el-tag :type="getParticipantStatusType(row.status) || 'primary'">
               {{ getParticipantStatusName(row.status) }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150">
           <template #default="{ row }">
-            <el-button 
-              v-if="row.status === 'pending'" 
-              type="success" 
-              size="small" 
-              @click="handleApproveParticipant(row)"
-            >
+            <el-button v-if="row.status === 'pending'" type="success" size="small"
+              @click="handleApproveParticipant(row)">
               通过
             </el-button>
-            <el-button 
-              v-if="row.status === 'pending'" 
-              type="danger" 
-              size="small" 
-              @click="handleRejectParticipant(row)"
-            >
+            <el-button v-if="row.status === 'pending'" type="danger" size="small" @click="handleRejectParticipant(row)">
               拒绝
             </el-button>
-            <el-button 
-              v-if="row.status === 'approved'" 
-              type="warning" 
-              size="small" 
-              @click="handleCancelParticipant(row)"
-            >
+            <el-button v-if="row.status === 'approved'" type="warning" size="small"
+              @click="handleCancelParticipant(row)">
               取消
             </el-button>
           </template>
@@ -566,7 +497,7 @@ const handleCancel = async (row: any) => {
       cancelButtonText: '取消',
       type: 'warning'
     })
-    
+
     row.status = 'cancelled'
     ElMessage.success('活动已取消')
   } catch {
@@ -581,7 +512,7 @@ const handleDelete = async (row: any) => {
       cancelButtonText: '取消',
       type: 'warning'
     })
-    
+
     const index = tableData.value.findIndex(item => item.id === row.id)
     if (index > -1) {
       tableData.value.splice(index, 1)
@@ -609,7 +540,7 @@ const handleCancelParticipant = (row: any) => {
 
 const handleSubmit = async () => {
   if (!formRef.value) return
-  
+
   await formRef.value.validate((valid) => {
     if (valid) {
       if (form.id) {
@@ -653,6 +584,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
 .activities-management {
   padding: 0;
 }
@@ -765,12 +697,12 @@ onMounted(() => {
   .search-bar :deep(.el-form) {
     flex-direction: column;
   }
-  
+
   .search-bar :deep(.el-form-item) {
     margin-right: 0;
     margin-bottom: 10px;
   }
-  
+
   .participants-stats :deep(.el-row) {
     flex-direction: column;
   }

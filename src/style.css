@@ -75,6 +75,8 @@ p {
 
 .el-button {
   font-weight: 500;
+  margin-left: 0px;
+  margin-right: 12px;
 }
 
 .el-menu-item, .el-sub-menu__title {
