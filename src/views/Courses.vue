@@ -95,7 +95,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="150" />
-        <el-table-column label="操作" width="250" fixed="right">
+        <el-table-column label="操作" width="280" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
             <el-button type="info" size="small" @click="handleViewContent(row)">内容</el-button>
@@ -107,6 +107,14 @@
               @click="handleAudit(row)"
             >
               审核
+            </el-button>
+            <el-button 
+              v-if="row.status === 'pending'" 
+              type="danger" 
+              size="small" 
+              @click="handleReject(row)"
+            >
+              驳回
             </el-button>
             <el-button type="danger" size="small" @click="handleDelete(row)">删除</el-button>
           </template>
@@ -706,6 +714,18 @@ const handleCurrentChange = (page: number) => {
 onMounted(() => {
   pagination.total = tableData.value.length
 })
+
+const handleReject = async (row: any) => {
+  const { value } = await ElMessageBox.prompt('请输入驳回原因', '驳回课程', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+  });
+  if (value) {
+    // 调用驳回API
+    row.status = 'draft';
+    ElMessage.success('课程已驳回');
+  }
+};
 </script>
 
 <style scoped>

@@ -113,6 +113,12 @@ const router = createRouter({
           component: () => import('../views/Settings.vue'),
           meta: { title: '系统设置', icon: 'Setting' }
         },
+        {
+          path: '/finance',
+          name: 'Finance',
+          component: () => import('../views/Finance.vue'),
+          meta: { title: '财务管理', icon: 'Wallet' }
+        },
          {
           path: '/profile',
           name: 'Profile',
@@ -120,7 +126,12 @@ const router = createRouter({
           meta: { title: '个人中心', icon: 'User', hidden: true }
         }
       ]
-    }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: '404',
+      component: () => import('../views/404.vue')
+    },
   ]
 })
 
