@@ -341,12 +341,11 @@
 </template>
 
 <script setup lang="ts">
-// @ts-ignore 忽略找不到模块声明文件的类型检查
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { Plus, Search } from '@element-plus/icons-vue'
-// @ts-ignore 忽略找不到模块声明文件的类型检查
-import { courseApi } from '../../api'
+// 取消注释API导入
+import { getCourseEnrollmentList } from '../../api';
 
 const loading = ref(false)
 const dialogVisible = ref(false)
@@ -411,9 +410,13 @@ onMounted(() => {
 const getCourseList = async () => {
   loading.value = true
   try {
-    const res = await courseApi.getList(searchForm)
+    // 取消注释API调用并添加错误处理
+    const res = await getCourseEnrollmentList();
+    console.log(res);
     tableData.value = res.data
     pagination.total = res.total
+  } catch (error) {
+    ElMessage.error('获取课程列表失败: ' + (error as Error).message)
   } finally {
     loading.value = false
   }
@@ -683,7 +686,7 @@ const handleDeleteChapter = async (row: any) => {
 }
 
 const handleViewStudentDetail = (row: any) => {
-  ElMessage.info('学员详情功能开发中...')
+  ElMessage.info('学员详情功能开发中...',row)
 }
 
 const handleSubmit = async () => {

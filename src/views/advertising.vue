@@ -71,7 +71,7 @@
 import { ref, onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Plus } from '@element-plus/icons-vue'
-import { advertisementApi } from '../../api'
+// import { advertisementApi } from '../../api/index'
 
 // 控制弹窗显示/隐藏
 const showModal = ref(false)
@@ -125,15 +125,15 @@ const handleSubmit = () => {
   adFormRef.value.validate((valid) => {
     if (valid) {
       // 这里添加表单提交逻辑
-      advertisementApi.create(adForm.value).then(() => {
-        ElMessage.success('广告位创建成功')
-        showModal.value = false
-        // 重置表单并刷新列表
-        adFormRef.value.resetFields()
-        fetchAds()
-      }).catch(error => {
-        ElMessage.error('广告位创建失败: ' + (error.msg || error.message))
-      })
+      // advertisementApi.create(adForm.value).then(() => {
+      //   ElMessage.success('广告位创建成功')
+      //   showModal.value = false
+      //   // 重置表单并刷新列表
+      //   adFormRef.value.resetFields()
+      //   fetchAds()
+      // }).catch(error => {
+      //   ElMessage.error('广告位创建失败: ' + (error.msg || error.message))
+      // })
     }
   })
 }
@@ -158,9 +158,9 @@ const ads = ref([]);
 // 获取广告位列表
 const fetchAds = async () => {
   try {
-    const response = await advertisementApi.getList();
-    console.log(response);
-    ads.value = response.data;
+    // const response = await advertisementApi.getList();
+    // console.log(response);
+    // ads.value = response.data;
   } catch (error) {
     ElMessage.error('获取广告位列表失败');
     console.error(error);
@@ -186,7 +186,7 @@ const handleDelete = async (row) => {
     }
   ).then(async () => {
     try {
-      await advertisementApi.delete(row.id);
+      // await advertisementApi.delete(row.id);
       ElMessage.success('删除成功');
       fetchAds();
     } catch (error) {
