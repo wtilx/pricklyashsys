@@ -86,16 +86,3 @@ export const statisticsApi = {
   getContentStatistics: () => request.get('/statistics/content'),
   getInteractionStatistics: () => request.get('/statistics/interactions')
 };
-
-// 导出所有API模块
-export default {
-  auth: authApi,
-  user: userApi,
-  advertisement: advertisementApi,
-  course: courseApi,
-  project: projectApi,
-  activity: activityApi,
-  content: contentApi,
-  interaction: interactionApi,
-  statistics: statisticsApi
-};

@@ -71,8 +71,6 @@
 import { ref, onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Plus } from '@element-plus/icons-vue'
-// 取消注释以导入advertisementApi
-import { advertisementApi } from '../../api'
 
 // 控制弹窗显示/隐藏
 const showModal = ref(false)
