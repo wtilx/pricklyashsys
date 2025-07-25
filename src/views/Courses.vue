@@ -341,9 +341,12 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore 忽略找不到模块声明文件的类型检查
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { Plus, Search } from '@element-plus/icons-vue'
+// @ts-ignore 忽略找不到模块声明文件的类型检查
+import { courseApi } from '../../api'
 
 const loading = ref(false)
 const dialogVisible = ref(false)
@@ -358,35 +361,6 @@ const searchForm = reactive({
   field: '',
   status: ''
 })
-
-const form = reactive({
-  id: null,
-  name: '',
-  field: '',
-  instructor: '',
-  duration: 1,
-  price: 0,
-  description: '',
-  targetAudience: '',
-  objectives: '',
-  cover: '',
-  tags: '',
-  status: 'draft'
-})
-
-const rules = {
-  name: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
-  field: [{ required: true, message: '请选择专业领域', trigger: 'change' }],
-  instructor: [{ required: true, message: '请选择讲师', trigger: 'change' }],
-  description: [{ required: true, message: '请输入课程简介', trigger: 'blur' }]
-}
-
-const pagination = reactive({
-  currentPage: 1,
-  pageSize: 10,
-  total: 0
-})
-
 const tableData = ref([
   {
     id: 1,
@@ -431,6 +405,48 @@ const tableData = ref([
     cover: 'https://images.pexels.com/photos/5669602/pexels-photo-5669602.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1'
   }
 ])
+onMounted(() => {
+  getCourseList()
+})
+const getCourseList = async () => {
+  loading.value = true
+  try {
+    const res = await courseApi.getList(searchForm)
+    tableData.value = res.data
+    pagination.total = res.total
+  } finally {
+    loading.value = false
+  }
+}
+const form = reactive({
+  id: null,
+  name: '',
+  field: '',
+  instructor: '',
+  duration: 1,
+  price: 0,
+  description: '',
+  targetAudience: '',
+  objectives: '',
+  cover: '',
+  tags: '',
+  status: 'draft'
+})
+
+const rules = {
+  name: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
+  field: [{ required: true, message: '请选择专业领域', trigger: 'change' }],
+  instructor: [{ required: true, message: '请选择讲师', trigger: 'change' }],
+  description: [{ required: true, message: '请输入课程简介', trigger: 'blur' }]
+}
+
+const pagination = reactive({
+  currentPage: 1,
+  pageSize: 10,
+  total: 0
+})
+
+
 
 const chaptersData = ref([
   {

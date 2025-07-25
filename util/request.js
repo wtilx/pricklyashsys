@@ -48,35 +48,4 @@ service.interceptors.response.use(
   }
 );
 
-// 导出请求方法
-export const request = {
-  get: (url, params = {}) => service.get(url, { params }),
-  post: (url, data = {}) => service.post(url, data),
-  put: (url, data = {}) => service.put(url, data),
-  delete: (url, params = {}) => service.delete(url, { params }),
-  upload: (url, file) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    return service.post(url, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
-  }
-};
-
-// 广告相关接口
-export const advertisementApi = {
-  // 获取广告列表
-  getList: () => request.get('/advertisements'),
-  // 获取广告详情
-  getDetail: (id) => request.get(`/advertisements/${id}`),
-  // 创建广告
-  create: (data) => request.post('/advertisements', data),
-  // 更新广告
-  update: (id, data) => request.put(`/advertisements/${id}`, data),
-  // 删除广告
-  delete: (id) => request.delete(`/advertisements/${id}`),
-  // 上传广告图片
-  uploadImage: (file) => request.upload('/upload', file)
-};
-
-export default request;
+export default service;
