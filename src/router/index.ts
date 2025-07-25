@@ -102,6 +102,12 @@ const router = createRouter({
           ]
         },
         {
+          path: '/advertising',
+          name: 'Advertising',
+          component: () => import('../views/advertising.vue'),
+          meta: { title: '广告管理', icon: 'Picture' }
+        },
+        {
           path: '/statistics',
           name: 'Statistics',
           component: () => import('../views/Statistics.vue'),
