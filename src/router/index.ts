@@ -70,6 +70,7 @@ const router = createRouter({
           component: () => import('../views/Activities.vue'),
           meta: { title: '活动管理', icon: 'Calendar' }
         },
+      
         {
           path: '/courses',
           name: 'Courses',
@@ -81,6 +82,13 @@ const router = createRouter({
           name: 'Projects',
           component: () => import('../views/Projects.vue'),
           meta: { title: '项目管理', icon: 'Folder' }
+        },
+          {
+        //  广告
+        path: '/Advertisement',
+        name: 'Advertisement',
+        component: () => import('../views/Advertisement.vue'),
+        meta: { title: '广告管理', icon: 'PictureFilled' }
         },
         {
           path: '/interactions',
@@ -100,12 +108,6 @@ const router = createRouter({
               meta: { title: '互助问答', icon: 'QuestionFilled' }
             }
           ]
-        },
-        {
-          path: '/advertising',
-          name: 'Advertising',
-          component: () => import('../views/Advertising.vue'),
-          meta: { title: '广告管理', icon: 'Picture' }
         },
         {
           path: '/statistics',

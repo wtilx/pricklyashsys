@@ -341,6 +341,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { Plus, Search } from '@element-plus/icons-vue'
+import { projectApi } from "../api"
 
 const loading = ref(false)
 const dialogVisible = ref(false)
@@ -487,7 +488,6 @@ const projectParticipants = ref([
     status: 'active'
   }
 ])
-
 const completedMilestones = computed(() => {
   return milestonesData.value.filter(m => m.status === 'completed').length
 })

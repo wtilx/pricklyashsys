@@ -76,7 +76,8 @@
             <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
             <el-button type="info" size="small" @click="handleViewParticipants(row)">参与者</el-button>
             <el-button type="success" size="small" @click="handleNotify(row)">通知</el-button>
-            <el-button v-if="row.status === 'registering'" type="warning" size="small" @click="handleCancel(row)">取消</el-button>
+            <el-button v-if="row.status === 'registering'" type="warning" size="small"
+              @click="handleCancel(row)">取消</el-button>
             <el-button type="danger" size="small" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -255,6 +256,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { Plus, Search } from '@element-plus/icons-vue'
+import { eventApi } from '@/api'
 
 const loading = ref(false)
 const dialogVisible = ref(false)
@@ -301,7 +303,10 @@ const pagination = reactive({
   pageSize: 10,
   total: 0
 })
-
+const limits = ref({
+  limit: 10,
+  page: 1,
+})
 const tableData = ref([
   {
     id: 1,
@@ -379,6 +384,17 @@ const participantsData = ref([
     status: 'approved'
   }
 ])
+const token = ref('')
+onMounted(() => {
+  token.value = localStorage.getItem('token') || ''
+  getevent()
+})
+const getevent = async () => {
+  eventApi.getEventList(limits).then(res => {
+    console.log(res);
+    participantsData.value = res.data
+  })
+}
 
 const pendingCount = computed(() => {
   return participantsData.value.filter(p => p.status === 'pending').length
@@ -584,7 +600,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
 .activities-management {
   padding: 0;
 }

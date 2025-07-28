@@ -16,7 +16,7 @@
       >
         <el-form-item prop="username">
           <el-input
-            v-model="loginForm.username"
+            v-model="loginForm.account"
             placeholder="请输入用户名"
             size="large"
             :prefix-icon="User"
@@ -62,6 +62,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage, type FormInstance } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
 import { useUserStore } from '../stores/user'
+import { userApi } from "../api"
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -70,12 +71,12 @@ const loginFormRef = ref<FormInstance>()
 const loading = ref(false)
 
 const loginForm = reactive({
-  username: 'admin',
-  password: '123456'
+  account: 'admin',
+  password: 'admin123'
 })
 
 const rules = {
-  username: [
+  account: [
     { required: true, message: '请输入用户名', trigger: 'blur' }
   ],
   password: [
@@ -91,7 +92,8 @@ const handleLogin = async () => {
     if (valid) {
       loading.value = true
       try {
-        const result = await userStore.login(loginForm)
+        const result = await userApi.login(loginForm)
+        console.log(result);
         if (result.success) {
           ElMessage.success('登录成功')
           router.push('/')

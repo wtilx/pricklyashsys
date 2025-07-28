@@ -345,7 +345,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { Plus, Search } from '@element-plus/icons-vue'
 // 取消注释API导入
-import { getCourseEnrollmentList } from '../../api';
+import { courseApi } from '../api';
 
 const loading = ref(false)
 const dialogVisible = ref(false)
@@ -360,6 +360,12 @@ const searchForm = reactive({
   field: '',
   status: ''
 })
+const limits = ref({
+  limit: 4,
+  page: 1,
+  type: 1,
+})
+
 const tableData = ref([
   {
     id: 1,
@@ -411,7 +417,7 @@ const getCourseList = async () => {
   loading.value = true
   try {
     // 取消注释API调用并添加错误处理
-    const res = await getCourseEnrollmentList();
+    const res = await courseApi.getCourses(limits);
     console.log(res);
     tableData.value = res.data
     pagination.total = res.total
