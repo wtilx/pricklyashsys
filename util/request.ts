@@ -33,7 +33,7 @@ service.interceptors.request.use(
     // 添加token
         const token = localStorage.getItem('token');
     if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
+       config.headers['authori-zation'] = `${token}`
     }
 
     return config;
@@ -58,7 +58,7 @@ service.interceptors.response.use(
       return Promise.reject(new Error(message || 'Error'));
     }
 
-    return data;
+    return response;
   },
   (error: AxiosError) => {
     loadingInstance?.close();

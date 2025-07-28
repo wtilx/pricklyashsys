@@ -93,9 +93,11 @@ const handleLogin = async () => {
       loading.value = true
       try {
         const result = await userApi.login(loginForm)
-        console.log(result);
-        if (result.success) {
+        if (result.data.code===200) {
           ElMessage.success('登录成功')
+          // 存储用户信息到localStorage
+          localStorage.setItem('userInfo', JSON.stringify(result.data.data))
+          localStorage.setItem('token', result.data.data.token)
           router.push('/')
         } else {
           ElMessage.error(result.message || '登录失败')

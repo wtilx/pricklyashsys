@@ -417,10 +417,10 @@ const getCourseList = async () => {
   loading.value = true
   try {
     // 取消注释API调用并添加错误处理
-    const res = await courseApi.getCourses(limits);
+    const res = await courseApi.getCourses(limits.value);
     console.log(res);
-    tableData.value = res.data
-    pagination.total = res.total
+    tableData.value = res.data.data.list
+    pagination.total = res.data.data.total
   } catch (error) {
     ElMessage.error('获取课程列表失败: ' + (error as Error).message)
   } finally {

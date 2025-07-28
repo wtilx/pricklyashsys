@@ -356,6 +356,11 @@ const searchForm = reactive({
   type: '',
   status: ''
 })
+const limits = ref({
+  limit: 4,
+  page: 1,
+  type: 1,
+})
 
 const form = reactive({
   id: null,
@@ -488,6 +493,22 @@ const projectParticipants = ref([
     status: 'active'
   }
 ])
+onMounted(() => {
+  getProjectList()
+})
+const getProjectList = async () => {
+  loading.value = true
+  try {
+    const res = await projectApi.getProjects(limits.value)
+    console.log(res.data.data.list);
+    // tableData.value = res.data.data.list
+    pagination.total = res.data.data.total
+  } catch (error) {
+    ElMessage.error('获取项目列表失败: ' + (error as Error).message)
+  } finally {
+    loading.value = false
+  }
+}
 const completedMilestones = computed(() => {
   return milestonesData.value.filter(m => m.status === 'completed').length
 })
@@ -667,11 +688,9 @@ const handleDelete = async (row: any) => {
       type: 'warning'
     })
     
-    const index = tableData.value.findIndex(item => item.id === row.id)
-    if (index > -1) {
-      tableData.value.splice(index, 1)
-    }
-    ElMessage.success('删除成功')
+    projectApi.deleteProject(row.id).then(() => {
+      ElMessage.success('删除成功')
+    })
   } catch {
     // 用户取消
   }
