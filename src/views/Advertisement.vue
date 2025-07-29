@@ -40,19 +40,19 @@
                     <el-input v-model="adForm.companyName" placeholder="请输入公司名称"></el-input>
                 </el-form-item>
                 <el-form-item label="图片上传" prop="imageUrl">
-                    <el-upload class="upload-custom" action="/api/front/user/image"
-                        :headers="{ Authorization: 'Bearer ' + token }" :on-success="handleUploadSuccess"
+                    <el-upload class="upload-custom" action="http://117.72.85.204:8990/api/front/user/image"
+                        :headers="{ 'authori-zation': token }" name="multipart" :data="formData" :on-success="handleUploadSuccess"
                         :before-upload="beforeUpload" v-model:file-list="fileList" list-type="picture-card" :limit="1"
                         :on-exceed="handleExceed">
                         <div style="display: flex;align-items: center;flex-direction: column;">
-                            <div class="upload-icon-container">
+                            <!-- <div class="upload-icon-container"> -->
                                 <el-icon class="upload-icon">
                                     <Plus />
                                 </el-icon>
-                            </div>
-                            <div class="upload-text">点击上传或拖拽文件至此处</div>
+                            <!-- </div> -->
                         </div>
                     </el-upload>
+                    <div class="upload-text">点击上传或拖拽文件至此处</div>
                 </el-form-item>
                 <el-form-item label="链接URL" prop="linkUrl">
                     <el-input v-model="adForm.linkUrl" placeholder="请输入链接URL"></el-input>
@@ -76,8 +76,9 @@ const limits = ref({
     page: 1,
     type: 1,
 })
-const token = ref('')
-// 控制弹窗显示/隐藏
+const token = ref(localStorage.getItem('token'))
+const formData = ref({'model': '','pid':''})
+// 控制弹窗显示/隐藏1
 const showModal = ref(false)
 // 广告位表单数据（仅保留三个字段）
 const adForm = ref({
@@ -102,7 +103,7 @@ const beforeUpload = (file) => {
     }
     if (!isLt2M) {
         ElMessage.error('上传图片大小不能超过 2MB!')
-    }
+    }4
     return isJpgOrPng && isLt2M
 }
 
@@ -163,7 +164,6 @@ const ads = ref([]);
 const fetchAds = async () => {
     try {
         advertisementApi.getAdvertisements(limits.value).then(res => {
-            console.log(res);
             ads.value = res.data.data.list
         })
     } catch (error) {
@@ -282,7 +282,7 @@ el-button.operation-btn .el-icon {
 }
 
 .upload-icon {
-    font-size: 24px;
+    font-size: 48px;
     color: #409eff;
 }
 
@@ -291,6 +291,7 @@ el-button.operation-btn .el-icon {
     color: #b3b3b3;
     margin-bottom: 6px;
     font-weight: 500;
+    margin-left: 12px;
 }
 
 .upload-hint {

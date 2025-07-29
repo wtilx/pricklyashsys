@@ -2,6 +2,8 @@
   "compilerOptions": {
     // 目标 JavaScript 版本
     "target": "ES6",                         
+    // 添加lib选项以支持现代JavaScript特性
+    "lib": ["es2017", "dom"],
     // 模块系统
     "module": "CommonJS",                    
     // 输出目录

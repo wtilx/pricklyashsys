@@ -14,12 +14,7 @@
       <div class="search-bar">
         <el-form :model="searchForm" inline>
           <el-form-item label="项目名称">
-            <el-input
-              v-model="searchForm.name"
-              placeholder="请输入项目名称"
-              clearable
-              style="width: 200px"
-            />
+            <el-input v-model="searchForm.name" placeholder="请输入项目名称" clearable style="width: 200px" />
           </el-form-item>
           <el-form-item label="项目类型">
             <el-select v-model="searchForm.type" placeholder="请选择类型" clearable style="width: 150px">
@@ -52,27 +47,27 @@
           <template #default="{ row }">
             <div class="project-info">
               <div class="project-details">
-                <div class="project-name">{{ row.name }}</div>
-                <div class="project-description">{{ row.description }}</div>
+                <div class="project-name">{{ row.title }}</div>
+                <div class="project-description">{{ row.content }}</div>
                 <div class="project-meta">
-                  <el-tag :type="getTypeColor(row.type) || 'primary'" size="small">
-                    {{ getTypeName(row.type) }}
-                  </el-tag>
-                  <span class="project-leader">负责人：{{ row.leader }}</span>
+                  <!-- <el-tag :type="getTypeColor(row.status) || 'primary'" size="small">
+                    {{ getTypeName(row.status) }}
+                  </el-tag> -->
+                  <span class="project-leader">负责人：{{ row.nickname }}</span>
                 </div>
               </div>
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="participants" label="参与人数" width="100" />
-        <el-table-column prop="progress" label="项目进度" width="150">
+        <el-table-column prop="enrolledCount" label="参与人数" width="100" />
+        <!-- <el-table-column prop="progress" label="项目进度" width="150">
           <template #default="{ row }">
             <el-progress :percentage="row.progress" :stroke-width="8" />
           </template>
-        </el-table-column>
-        <el-table-column prop="budget" label="预算" width="100">
+        </el-table-column> -->
+        <el-table-column prop="fee" label="预算" width="100">
           <template #default="{ row }">
-            ¥{{ row.budget.toLocaleString() }}
+            ¥{{ row.fee.toLocaleString() }}
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" width="100">
@@ -82,19 +77,28 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="startDate" label="开始日期" width="120" />
-        <el-table-column prop="endDate" label="结束日期" width="120" />
+        <el-table-column prop="startTime" label="开始日期" width="120" />
+        <el-table-column prop="endTime" label="结束日期" width="120" />
+        <el-table-column prop="auditStatus" label="项目审核" width="100">
+          <template #default="{ row }">
+            <!-- 审核状态按钮组 -->
+            <el-button v-if="row.auditStatus === 0" type="primary" size="small" @click="handleSubmitAudit(row)">
+              提交审核
+            </el-button>
+            <el-button v-else-if="row.auditStatus === 1" type="warning" size="small" disabled>
+              审核中
+            </el-button>
+            <el-button v-else-if="row.auditStatus === 2" type="success" size="small" disabled>
+              已审核
+            </el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="250" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
             <el-button type="info" size="small" @click="handleViewProgress(row)">进度</el-button>
             <el-button type="success" size="small" @click="handleManageParticipants(row)">成员</el-button>
-            <el-button 
-              v-if="row.status === 'ongoing'" 
-              type="warning" 
-              size="small" 
-              @click="handlePause(row)"
-            >
+            <el-button v-if="row.status === 2" type="warning" size="small" @click="handlePause(row)">
               暂停
             </el-button>
             <el-button type="danger" size="small" @click="handleDelete(row)">删除</el-button>
@@ -104,31 +108,15 @@
 
       <!-- 分页 -->
       <div class="pagination">
-        <el-pagination
-          v-model:current-page="pagination.currentPage"
-          v-model:page-size="pagination.pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          :total="pagination.total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+        <el-pagination v-model:current-page="pagination.currentPage" v-model:page-size="pagination.pageSize"
+          :page-sizes="[10, 20, 50, 100]" :total="pagination.total" layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange" @current-change="handleCurrentChange" />
       </div>
     </el-card>
 
     <!-- 编辑对话框 -->
-    <el-dialog
-      v-model="dialogVisible"
-      :title="dialogTitle"
-      width="800px"
-      @close="handleDialogClose"
-    >
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        label-width="100px"
-      >
+    <el-dialog v-model="dialogVisible" :title="dialogTitle" width="800px" @close="handleDialogClose">
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
         <el-row :gutter="20">
           <el-col :span="16">
             <el-form-item label="项目名称" prop="name">
@@ -148,12 +136,7 @@
         </el-row>
 
         <el-form-item label="项目描述" prop="description">
-          <el-input
-            v-model="form.description"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入项目描述"
-          />
+          <el-input v-model="form.description" type="textarea" :rows="3" placeholder="请输入项目描述" />
         </el-form-item>
 
         <el-row :gutter="20">
@@ -172,42 +155,22 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="开始日期" prop="startDate">
-              <el-date-picker
-                v-model="form.startDate"
-                type="date"
-                placeholder="选择开始日期"
-                style="width: 100%"
-              />
+              <el-date-picker v-model="form.startDate" type="date" placeholder="选择开始日期" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="结束日期" prop="endDate">
-              <el-date-picker
-                v-model="form.endDate"
-                type="date"
-                placeholder="选择结束日期"
-                style="width: 100%"
-              />
+              <el-date-picker v-model="form.endDate" type="date" placeholder="选择结束日期" style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-form-item label="项目目标">
-          <el-input
-            v-model="form.objectives"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入项目目标"
-          />
+          <el-input v-model="form.objectives" type="textarea" :rows="3" placeholder="请输入项目目标" />
         </el-form-item>
 
         <el-form-item label="参与要求">
-          <el-input
-            v-model="form.requirements"
-            type="textarea"
-            :rows="2"
-            placeholder="请输入参与要求"
-          />
+          <el-input v-model="form.requirements" type="textarea" :rows="2" placeholder="请输入参与要求" />
         </el-form-item>
 
         <el-form-item label="项目状态" prop="status">
@@ -219,7 +182,7 @@
           </el-radio-group>
         </el-form-item>
       </el-form>
-      
+
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="handleSubmit">确定</el-button>
@@ -227,11 +190,7 @@
     </el-dialog>
 
     <!-- 项目进度对话框 -->
-    <el-dialog
-      v-model="progressDialogVisible"
-      title="项目进度管理"
-      width="900px"
-    >
+    <el-dialog v-model="progressDialogVisible" title="项目进度管理" width="900px">
       <div class="progress-management" v-if="selectedProject">
         <div class="progress-header">
           <h4>{{ selectedProject.name }} - 项目进度</h4>
@@ -264,12 +223,8 @@
         </div>
 
         <el-timeline>
-          <el-timeline-item
-            v-for="milestone in milestonesData"
-            :key="milestone.id"
-            :timestamp="milestone.date"
-            :type="getMilestoneType(milestone.status)"
-          >
+          <el-timeline-item v-for="milestone in milestonesData" :key="milestone.id" :timestamp="milestone.date"
+            :type="getMilestoneType(milestone.status)">
             <div class="milestone-content">
               <h4>{{ milestone.title }}</h4>
               <p>{{ milestone.description }}</p>
@@ -277,12 +232,8 @@
                 <el-tag :type="getMilestoneStatusType(milestone.status) || 'primary'">
                   {{ getMilestoneStatusName(milestone.status) }}
                 </el-tag>
-                <el-button 
-                  v-if="milestone.status === 'pending'" 
-                  type="success" 
-                  size="small" 
-                  @click="handleCompleteMilestone(milestone)"
-                >
+                <el-button v-if="milestone.status === 'pending'" type="success" size="small"
+                  @click="handleCompleteMilestone(milestone)">
                   标记完成
                 </el-button>
               </div>
@@ -293,11 +244,7 @@
     </el-dialog>
 
     <!-- 成员管理对话框 -->
-    <el-dialog
-      v-model="participantsDialogVisible"
-      title="项目成员管理"
-      width="1000px"
-    >
+    <el-dialog v-model="participantsDialogVisible" title="项目成员管理" width="1000px">
       <div class="participants-management">
         <div class="participants-header">
           <h4>项目成员列表</h4>
@@ -357,7 +304,7 @@ const searchForm = reactive({
   status: ''
 })
 const limits = ref({
-  limit: 4,
+  limit: 10,
   page: 1,
   type: 1,
 })
@@ -392,45 +339,45 @@ const pagination = reactive({
 })
 
 const tableData = ref([
-  {
-    id: 1,
-    name: '农民工法律援助项目',
-    type: 'legal_aid',
-    description: '为农民工提供免费法律咨询和援助服务',
-    leader: '张律师',
-    participants: 15,
-    progress: 75,
-    budget: 50000,
-    status: 'ongoing',
-    startDate: '2024-01-01',
-    endDate: '2024-06-30'
-  },
-  {
-    id: 2,
-    name: '知识产权保护研究',
-    type: 'research',
-    description: '研究中小企业知识产权保护策略',
-    leader: '王教授',
-    participants: 8,
-    progress: 45,
-    budget: 80000,
-    status: 'ongoing',
-    startDate: '2024-01-15',
-    endDate: '2024-12-31'
-  },
-  {
-    id: 3,
-    name: '社区法律宣传活动',
-    type: 'public_welfare',
-    description: '在社区开展法律知识普及活动',
-    leader: '李专家',
-    participants: 12,
-    progress: 100,
-    budget: 20000,
-    status: 'completed',
-    startDate: '2023-10-01',
-    endDate: '2023-12-31'
-  }
+  // {
+  //   id: 1,
+  //   name: '农民工法律援助项目',
+  //   type: 'legal_aid',
+  //   description: '为农民工提供免费法律咨询和援助服务',
+  //   leader: '张律师',
+  //   participants: 15,
+  //   progress: 75,
+  //   budget: 50000,
+  //   status: 'ongoing',
+  //   startDate: '2024-01-01',
+  //   endDate: '2024-06-30'
+  // },
+  // {
+  //   id: 2,
+  //   name: '知识产权保护研究',
+  //   type: 'research',
+  //   description: '研究中小企业知识产权保护策略',
+  //   leader: '王教授',
+  //   participants: 8,
+  //   progress: 45,
+  //   budget: 80000,
+  //   status: 'ongoing',
+  //   startDate: '2024-01-15',
+  //   endDate: '2024-12-31'
+  // },
+  // {
+  //   id: 3,
+  //   name: '社区法律宣传活动',
+  //   type: 'public_welfare',
+  //   description: '在社区开展法律知识普及活动',
+  //   leader: '李专家',
+  //   participants: 12,
+  //   progress: 100,
+  //   budget: 20000,
+  //   status: 'completed',
+  //   startDate: '2023-10-01',
+  //   endDate: '2023-12-31'
+  // }
 ])
 
 const milestonesData = ref([
@@ -458,7 +405,7 @@ const milestonesData = ref([
   {
     id: 4,
     title: '项目实施',
-    description: '开始实施法律援助服务',
+    description: '开始实施援助服务',
     date: '2024-04-01',
     status: 'pending'
   }
@@ -500,8 +447,8 @@ const getProjectList = async () => {
   loading.value = true
   try {
     const res = await projectApi.getProjects(limits.value)
-    console.log(res.data.data.list);
-    // tableData.value = res.data.data.list
+    console.log(res.data.data);
+    tableData.value = res.data.data.list
     pagination.total = res.data.data.total
   } catch (error) {
     ElMessage.error('获取项目列表失败: ' + (error as Error).message)
@@ -533,9 +480,9 @@ const getTypeName = (type: string) => {
 
 const getTypeColor = (type: string) => {
   const map: Record<string, string> = {
-    legal_aid: 'primary',
-    research: 'success',
-    public_welfare: 'warning',
+    '0': 'primary',
+    '1': 'success',
+    '2': 'warning',
     training: 'info'
   }
   return map[type] || ''
@@ -543,19 +490,20 @@ const getTypeColor = (type: string) => {
 
 const getStatusName = (status: string) => {
   const map: Record<string, string> = {
-    ongoing: '进行中',
-    completed: '已完成',
+    '1': '进行中',
+    "2": '已完成',
     paused: '已暂停',
-    cancelled: '已取消'
+    cancelled: '已取消',
+    '0': '未开始'
   }
   return map[status] || status
 }
 
 const getStatusType = (status: string) => {
   const map: Record<string, string> = {
-    ongoing: 'success',
-    completed: 'info',
-    paused: 'warning',
+    '2': 'success',
+    '1': 'info',
+    '0': 'warning',
     cancelled: 'danger'
   }
   return map[status] || ''
@@ -672,24 +620,36 @@ const handlePause = async (row: any) => {
       cancelButtonText: '取消',
       type: 'warning'
     })
-    
+
     row.status = 'paused'
     ElMessage.success('项目已暂停')
   } catch {
     // 用户取消
   }
 }
-
+const handleSubmitAudit = async (row: any) => {
+  try {
+    await ElMessageBox.confirm('确认提交审核吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    row.status = '1'
+    ElMessage.success('项目已提交审核')
+  } catch {
+    // 用户取消
+  }
+}
 const handleDelete = async (row: any) => {
   try {
     await ElMessageBox.confirm('确认删除该项目吗？', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
-    })
-    
-    projectApi.deleteProject(row.id).then(() => {
-      ElMessage.success('删除成功')
+    }).then(() => {
+      projectApi.deleteProject(row.id).then(() => {
+        ElMessage.success('删除成功')
+      })
     })
   } catch {
     // 用户取消
@@ -720,7 +680,7 @@ const handleRemoveParticipant = async (row: any) => {
       cancelButtonText: '取消',
       type: 'warning'
     })
-    
+
     const index = projectParticipants.value.findIndex(item => item.id === row.id)
     if (index > -1) {
       projectParticipants.value.splice(index, 1)
@@ -733,25 +693,25 @@ const handleRemoveParticipant = async (row: any) => {
 
 const handleSubmit = async () => {
   if (!formRef.value) return
-  
+
   await formRef.value.validate((valid) => {
     if (valid) {
-      if (form.id) {
-        const index = tableData.value.findIndex(item => item.id === form.id)
-        if (index > -1) {
-          Object.assign(tableData.value[index], { ...form })
-        }
-        ElMessage.success('更新成功')
-      } else {
-        const newItem = {
-          ...form,
-          id: Date.now(),
-          participants: 0,
-          progress: 0
-        }
-        tableData.value.unshift(newItem)
-        ElMessage.success('创建成功')
-      }
+      // if (form.id) {
+      //   const index = tableData.value.findIndex(item => item.id === form.id)
+      //   if (index > -1) {
+      //     Object.assign(tableData.value[index], { ...form })
+      //   }
+      //   ElMessage.success('更新成功')
+      // } else {
+      //   const newItem = {
+      //     ...form,
+      //     id: Date.now(),
+      //     participants: 0,
+      //     progress: 0
+      //   }
+      //   tableData.value.unshift(newItem)
+      //   ElMessage.success('创建成功')
+      // }
       dialogVisible.value = false
     }
   })
@@ -908,12 +868,12 @@ onMounted(() => {
   .search-bar :deep(.el-form) {
     flex-direction: column;
   }
-  
+
   .search-bar :deep(.el-form-item) {
     margin-right: 0;
     margin-bottom: 10px;
   }
-  
+
   .progress-overview :deep(.el-row) {
     flex-direction: column;
   }
