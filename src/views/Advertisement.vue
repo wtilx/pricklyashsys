@@ -4,7 +4,7 @@
             <div class="card-header">
                 <div class="header-content">
                     <h1>广告管理</h1>
-                    <el-button type="primary" @click="()=>{showModal = true}" size="default" class="operation-btn">
+                    <el-button type="primary" @click="() => { showModal = true }" size="default" class="operation-btn">
                         <el-icon>
                             <Plus />
                         </el-icon>
@@ -164,7 +164,7 @@ const fetchAds = async () => {
     try {
         advertisementApi.getAdvertisements(limits.value).then(res => {
             console.log(res);
-            ads.value = res.data
+            ads.value = res.data.data.list
         })
     } catch (error) {
         ElMessage.error('获取广告位列表失败');
