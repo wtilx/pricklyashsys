@@ -452,7 +452,7 @@ onMounted(() => {
 const getProjectList = async () => {
   loading.value = true
   try {
-    const res = await projectApi.getProjects(limitsAdminlist.value)
+    const res = await projectApi.getProjects(limits.value)
     console.log(res.data.data);
     tableData.value = res.data.data.list
     pagination.total = res.data.data.total
@@ -574,7 +574,11 @@ const getParticipantStatusType = (status: string) => {
 }
 
 const handleSearch = () => {
-  ElMessage.info('搜索功能开发中...')
+  projectApi.getAdvertisementAdminList(limitsAdminlist.value).then(res => {
+    console.log(res.data.data);
+    tableData.value = res.data.data.list
+    pagination.total = res.data.data.total
+  })
 }
 
 const handleReset = () => {
