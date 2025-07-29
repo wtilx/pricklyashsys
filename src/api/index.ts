@@ -2,10 +2,10 @@ import request from '../../util/request';
 
 // 账号密码登录
 export const userApi = {
-    //账号密码登录 /api/front/login/pepper
-    login: (data) => request.post('/api/front/login/pepper', data),
-    //获取登录凭证  /api/front/user
-    getPepper: () => request.get(' /api/front/user'),
+  //账号密码登录 /api/front/login/pepper
+  login: (data) => request.post('/api/front/login/pepper', data),
+  //获取登录凭证  /api/front/user
+  getPepper: () => request.get(' /api/front/user'),
 }
 
 // 文件上传 API
@@ -36,6 +36,10 @@ export const projectApi = {
   // 创建项目列表
   createProjects(data) {
     return request.post('/api/front/project/create', data)
+  },
+  // 后台分页列表 /api/front/project/adminList
+  getAdvertisementAdminList(params) {
+    return request.get(`/api/front/project/adminList?limit=${params.limit}&page=${params.page}&auditStatus=${params.auditStatus}&title=${params.title}&status=${params.status}`)
   },
   // 分页列表
   getProjects(params) {
@@ -219,10 +223,7 @@ export const advertisementApi = {
   getAdvertisements(params) {
     return request.get(`/api/front/advertisement/list?limit=${params.limit}&page=${params.page}`)
   },
-  // 后台分页列表 /api/front/project/adminList
-  getAdvertisementAdminList(params) {
-    return request.get(`/api/front/advertisement/adminList?limit=${params.limit}&page=${params.page}&auditStatus=${params.auditStatus}&title=${params.title}&status=${params.status}`)
-  },
+
   //广告位详情 /api/front/advertisement/detail/{id}
   getAdvertisementDetail(id) {
     return request.get(`/api/front/advertisement/detail/${id}`)
@@ -239,5 +240,5 @@ export const advertisementApi = {
   deleteAdvertisement(id) {
     return request.delete(`/api/front/advertisement/delete/${id}`)
   }
-  
+
 }

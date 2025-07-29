@@ -308,7 +308,13 @@ const limits = ref({
   page: 1,
   type: 1,
 })
-
+const limitsAdminlist = ref({
+    limit: 10,
+    auditStatus: 1,
+    page: 1,
+    title: '当月项目3',
+    status: 2,
+})
 const form = reactive({
   id: null,
   name: '',
@@ -446,7 +452,7 @@ onMounted(() => {
 const getProjectList = async () => {
   loading.value = true
   try {
-    const res = await projectApi.getProjects(limits.value)
+    const res = await projectApi.getProjects(limitsAdminlist.value)
     console.log(res.data.data);
     tableData.value = res.data.data.list
     pagination.total = res.data.data.total
