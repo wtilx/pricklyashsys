@@ -18,8 +18,9 @@
                     <el-table-column prop="companyName" label="公司名称" min-width="120"></el-table-column>
                     <el-table-column label="广告图片" min-width="100">
                         <template #default="{ row }">
-                            <el-image :src="row.imageUrl" :preview-src-list="[row.imageUrl]"
-                                style="width: 50px; height: 50px; object-fit: cover;"></el-image>
+                            <el-image :src="'http://117.72.85.204:8990' + row.imageUrl"
+                                :preview-src-list="['http://117.72.85.204:8990' + row.imageUrl]"
+                                style="width: 100px; height: 50px; object-fit: cover;"></el-image>
                         </template>
                     </el-table-column>
                     <el-table-column prop="linkUrl" label="链接地址" min-width="200"></el-table-column>
@@ -41,14 +42,14 @@
                 </el-form-item>
                 <el-form-item label="图片上传" prop="imageUrl">
                     <el-upload class="upload-custom" action="http://117.72.85.204:8990/api/front/user/image"
-                        :headers="{ 'authori-zation': token }" name="multipart" :data="formData" :on-success="handleUploadSuccess"
-                        :before-upload="beforeUpload" v-model:file-list="fileList" list-type="picture-card" :limit="1"
-                        :on-exceed="handleExceed">
+                        :headers="{ 'authori-zation': token }" name="multipart" :data="formData"
+                        :on-success="handleUploadSuccess" :before-upload="beforeUpload" v-model:file-list="fileList"
+                        list-type="picture-card" :limit="1" :on-exceed="handleExceed">
                         <div style="display: flex;align-items: center;flex-direction: column;">
                             <!-- <div class="upload-icon-container"> -->
-                                <el-icon class="upload-icon">
-                                    <Plus />
-                                </el-icon>
+                            <el-icon class="upload-icon">
+                                <Plus />
+                            </el-icon>
                             <!-- </div> -->
                         </div>
                     </el-upload>
@@ -60,7 +61,8 @@
             </el-form>
             <template #footer>
                 <el-button @click="showModal = false">取消</el-button>
-                <el-button type="primary" @click="handleSubmit">确定</el-button>
+                <el-button v-if="title == '新增'" type="primary" @click="handleSubmit">确定</el-button>
+                <el-button v-else type="primary" @click="handleEditSubmit">确定</el-button>
             </template>
         </el-dialog>
     </div>
@@ -77,7 +79,7 @@ const limits = ref({
     type: 1,
 })
 const token = ref(localStorage.getItem('token'))
-const formData = ref({'model': '','pid':''})
+const formData = ref({ 'model': '', 'pid': '' })
 // 控制弹窗显示/隐藏1
 const showModal = ref(false)
 // 广告位表单数据（仅保留三个字段）
@@ -103,7 +105,7 @@ const beforeUpload = (file) => {
     }
     if (!isLt2M) {
         ElMessage.error('上传图片大小不能超过 2MB!')
-    }4
+    } 4
     return isJpgOrPng && isLt2M
 }
 
@@ -115,7 +117,7 @@ const handleExceed = () => {
 // 上传成功处理
 const handleUploadSuccess = (response) => {
     if (response.code === 200) {
-        adForm.imageUrl = response.data.url
+        adForm.value.imageUrl = response.data.url
         ElMessage.success('图片上传成功')
     } else {
         ElMessage.error('图片上传失败: ' + response.msg)
@@ -124,7 +126,23 @@ const handleUploadSuccess = (response) => {
 
 // 表单引用
 const adFormRef = ref()
-
+// handleEditSubmit
+const handleEditSubmit = () => {
+    adFormRef.value.validate((valid) => {
+        if (valid) {
+            // 这里添加表单提交逻辑
+            advertisementApi.updateAdvertisement(adForm.value.id, adForm.value).then(() => {
+                ElMessage.success('广告位更新成功')
+                showModal.value = false
+                // 重置表单并刷新列表
+                adFormRef.value.resetFields()
+                 fetchAds()
+            }).catch(error => {
+                ElMessage.error('广告位更新失败: ' + (error.msg || error.message))
+            })
+        }
+    })
+}
 // 提交表单
 const handleSubmit = () => {
     adFormRef.value.validate((valid) => {

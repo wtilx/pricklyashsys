@@ -219,6 +219,10 @@ export const advertisementApi = {
   getAdvertisements(params) {
     return request.get(`/api/front/advertisement/list?limit=${params.limit}&page=${params.page}`)
   },
+  // 后台分页列表 /api/front/project/adminList
+  getAdvertisementAdminList(params) {
+    return request.get(`/api/front/advertisement/adminList?limit=${params.limit}&page=${params.page}&auditStatus=${params.auditStatus}&title=${params.title}&status=${params.status}`)
+  },
   //广告位详情 /api/front/advertisement/detail/{id}
   getAdvertisementDetail(id) {
     return request.get(`/api/front/advertisement/detail/${id}`)
