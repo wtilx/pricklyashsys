@@ -32,9 +32,9 @@
             <div class="card-header">
               <span>用户增长趋势</span>
               <el-button-group size="small">
-                <el-button :type="activeTab === 'week' ? 'primary' : ''" @click="activeTab = 'week'">周</el-button>
-                <el-button :type="activeTab === 'month' ? 'primary' : ''" @click="activeTab = 'month'">月</el-button>
-                <el-button :type="activeTab === 'year' ? 'primary' : ''" @click="activeTab = 'year'">年</el-button>
+                <el-button :type="activeTab === 'week' ? 'primary' : ''" @click="handleTabChange('week')">周</el-button>
+                <el-button :type="activeTab === 'month' ? 'primary' : ''" @click="handleTabChange('month')">月</el-button>
+                <el-button :type="activeTab === 'year' ? 'primary' : ''" @click="handleTabChange('year')">年</el-button>
               </el-button-group>
             </div>
           </template>
@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { LineChart, PieChart } from 'echarts/charts'
@@ -101,6 +101,7 @@ import {
   GridComponent
 } from 'echarts/components'
 import VChart from 'vue-echarts'
+import { userChartApi } from '@/api'
 
 use([
   CanvasRenderer,
@@ -112,9 +113,9 @@ use([
   GridComponent
 ])
 
-const activeTab = ref('month')
-
-const stats = [
+const activeTab = ref('week')
+const userChartData = ref([])
+const stats = ref([
   {
     title: '总用户数',
     value: '12,345',
@@ -143,38 +144,72 @@ const stats = [
     color: '#f5222d',
     trend: 15.3
   }
-]
+])
+onMounted(() => {
+  getChartData()
+  getUserOverview()
+})
 
+const getUserOverview = async () => {
+  const res = await userChartApi.getUserOverview()
+  console.log(res.data.data)
+  stats.value[0].value = res.data.data.totalCount
+  // 正确计算增长率
+  stats.value[0].trend = ((res.data.data.thisMonthCount - res.data.data.lastMonthCount) / res.data.data.lastMonthCount) * 100
+}
+// 添加切换函数
+const handleTabChange = (tab: string) => {
+  // 更新激活的标签
+  activeTab.value = tab
+  // 重新获取图表数据
+  getChartData()
+}
+
+const getChartData = async () => {
+  // 显示加载状态（可选）
+  // loading.value = true
+  try {
+    const res = await userChartApi.getUserChart({"type": activeTab.value})
+    console.log(res.data.data)
+    userChartData.value = res.data.data.chartData
+  } catch (error) {
+    console.error('获取图表数据失败:', error)
+    // 可以添加错误提示
+  } finally {
+    // 隐藏加载状态（可选）
+    // loading.value = false
+  }
+}
 const userGrowthOption = computed(() => ({
   tooltip: {
     trigger: 'axis'
   },
   xAxis: {
     type: 'category',
-    data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+    data: userChartData.value.map((item: any) => item.period)
   },
   yAxis: {
-    type: 'value'
+    type: 'value',
   },
   series: [
     {
       name: '新增用户',
       type: 'line',
       smooth: true,
-      data: [120, 132, 101, 134, 90, 230, 210, 182, 191, 234, 290, 330],
+      data: userChartData.value.map((item: any) => item.count),
       itemStyle: {
         color: '#1890ff'
       }
     },
-    {
-      name: '活跃用户',
-      type: 'line',
-      smooth: true,
-      data: [220, 182, 191, 234, 290, 330, 310, 201, 154, 190, 330, 410],
-      itemStyle: {
-        color: '#52c41a'
-      }
-    }
+    // {
+    //   name: '活跃用户',
+    //   type: 'line',
+    //   smooth: true,
+    //   data: [220, 182, 191, 234, 290, 330, 310, 201, 154, 190, 330, 410],
+    //   itemStyle: {
+    //     color: '#52c41a'
+    //   }
+    // }
   ]
 }))
 

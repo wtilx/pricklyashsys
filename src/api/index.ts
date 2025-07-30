@@ -8,6 +8,14 @@ export const userApi = {
   getPepper: () => request.get(' /api/front/user'),
 }
 
+// 获取用户图表数据/api/front/user/statistics/chart
+export const userChartApi = {
+  // 获取用户图表数据
+  getUserChart: (data) => request.post('/api/front/user/statistics/chart',data),
+  //获取用户统计数据 /api/front/user/statistics/overview
+  getUserOverview: () => request.get('/api/front/user/statistics/overview'),
+}
+
 // 文件上传 API
 export const uploadApi = {
   // 上传单个文件
