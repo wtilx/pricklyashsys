@@ -1,4 +1,5 @@
 import request from '../../util/request';
+import qs from 'qs';
 
 // 账号密码登录
 export const userApi = {
@@ -47,7 +48,8 @@ export const projectApi = {
   },
   // 后台分页列表 /api/front/project/adminList
   getAdvertisementAdminList(params) {
-    return request.get(`/api/front/project/adminList?limit=${params.limit}&page=${params.page}&auditStatus=${params.auditStatus}&title=${params.title}&status=${params.status}`)
+    // 使用qs.stringify优化查询字符串构建
+    return request.get(`/api/front/project/adminList?${qs.stringify(params)}`);
   },
   // 分页列表
   getProjects(params) {

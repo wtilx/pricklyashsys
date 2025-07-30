@@ -83,7 +83,7 @@
           <template #default="{ row }">
             <!-- 审核状态按钮组 -->
             <el-button v-if="row.auditStatus === 0" type="primary" size="small" @click="handleSubmitAudit(row)">
-              提交审核
+              确认通过审核
             </el-button>
             <el-button v-else-if="row.auditStatus === 1" type="warning" size="small" disabled>
               审核中
@@ -306,14 +306,13 @@ const searchForm = reactive({
 const limits = ref({
   limit: 10,
   page: 1,
-  type: 1,
 })
 const limitsAdminlist = ref({
     limit: 10,
-    auditStatus: 1,
+    auditStatus: 2,
     page: 1,
-    title: '当月项目3',
-    status: 2,
+    title: '',
+    status: '',
 })
 const form = reactive({
   id: null,
@@ -452,7 +451,7 @@ onMounted(() => {
 const getProjectList = async () => {
   loading.value = true
   try {
-    const res = await projectApi.getProjects(limits.value)
+    const res = await projectApi.getAdvertisementAdminList(limits.value)
     console.log(res.data.data);
     tableData.value = res.data.data.list
     pagination.total = res.data.data.total
@@ -643,9 +642,12 @@ const handleSubmitAudit = async (row: any) => {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
+    }).then(() => {
+      row.status = '1'
+      projectApi.auditProject(row.id,row).then(() => {
+        ElMessage.success('项目已提交审核')
+      })
     })
-    row.status = '1'
-    ElMessage.success('项目已提交审核')
   } catch {
     // 用户取消
   }
@@ -736,7 +738,8 @@ const handleSizeChange = (size: number) => {
 }
 
 const handleCurrentChange = (page: number) => {
-  pagination.currentPage = page
+  limits.value.page = page
+  getProjectList()
 }
 
 onMounted(() => {

@@ -392,7 +392,7 @@ onMounted(() => {
 const getevent = async () => {
   eventApi.getEventList(limits.value).then(res => {
     console.log(res);
-    participantsData.value = res.data
+    tableData.value = res.data.data.list
   })
 }
 
