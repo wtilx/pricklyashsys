@@ -18,8 +18,8 @@
                     <el-table-column prop="companyName" label="公司名称" min-width="120"></el-table-column>
                     <el-table-column label="广告图片" min-width="100">
                         <template #default="{ row }">
-                            <el-image :src="'http://117.72.85.204:8990' + row.imageUrl"
-                                :preview-src-list="['http://117.72.85.204:8990' + row.imageUrl]"
+                            <el-image :src="'http://117.72.85.204' + row.imageUrl"
+                                :preview-src-list="['http://117.72.85.204' + row.imageUrl]"
                                 style="width: 100px; height: 50px; object-fit: cover;"></el-image>
                         </template>
                     </el-table-column>

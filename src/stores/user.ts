@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { userApi } from '@/api'
 
 export const useUserStore = defineStore('user', () => {
   const userInfo = ref({
@@ -22,9 +23,13 @@ export const useUserStore = defineStore('user', () => {
     return { success: false, message: '用户名或密码错误' }
   }
 
-  const logout = () => {
+  const logout = async () => {
     isLoggedIn.value = false
     userInfo.value = {} as any
+    await userApi.logout().then(() => {
+      localStorage.removeItem('token')
+      localStorage.removeItem('userInfo')
+    })
   }
 
   return {

@@ -152,7 +152,6 @@ onMounted(() => {
 
 const getUserOverview = async () => {
   const res = await userChartApi.getUserOverview()
-  console.log(res.data.data)
   stats.value[0].value = res.data.data.totalCount
   // 正确计算增长率
   stats.value[0].trend = ((res.data.data.thisMonthCount - res.data.data.lastMonthCount) / res.data.data.lastMonthCount) * 100
@@ -170,7 +169,6 @@ const getChartData = async () => {
   // loading.value = true
   try {
     const res = await userChartApi.getUserChart({"type": activeTab.value})
-    console.log(res.data.data)
     userChartData.value = res.data.data.chartData
   } catch (error) {
     console.error('获取图表数据失败:', error)

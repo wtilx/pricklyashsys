@@ -7,6 +7,8 @@ export const userApi = {
   login: (data) => request.post('/api/front/login/pepper', data),
   //获取登录凭证  /api/front/user
   getPepper: () => request.get(' /api/front/user'),
+  // 退出登录 /api/front/logout
+  logout: () => request.get('/api/front/logout'),
 }
 
 // 获取用户图表数据/api/front/user/statistics/chart
@@ -148,6 +150,10 @@ export const topicApi = {
   // 获取话题列表 /api/front/topic/list
   getTopics(uid) {
     return request.get(`/api/front/topic/list/${uid}`)
+  },
+  // /api/front/course/adminList
+  getCourseAdminList() {
+    return request.get(`/api/front/course/adminList`)
   },
   // 分页话题列表 /api/front/topic/list/page
   getTopicPage(params) {

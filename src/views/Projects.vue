@@ -43,7 +43,7 @@
       <el-table :data="tableData" v-loading="loading" stripe>
         <el-table-column type="selection" width="55" />
         <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column label="项目信息" min-width="250">
+        <el-table-column label="项目信息" min-width="200">
           <template #default="{ row }">
             <div class="project-info">
               <div class="project-details">
@@ -57,6 +57,11 @@
                 </div>
               </div>
             </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="type" label="项目图片" width="100" >
+          <template #default="{ row }">
+            <el-image :src="'http://117.72.85.204'+row.coverImage" :preview-src-list="['http://117.72.85.204'+row.coverImage]" fit="cover" />
           </template>
         </el-table-column>
         <el-table-column prop="enrolledCount" label="参与人数" width="100" />
@@ -98,7 +103,7 @@
             <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
             <el-button type="info" size="small" @click="handleViewProgress(row)">进度</el-button>
             <el-button type="success" size="small" @click="handleManageParticipants(row)">成员</el-button>
-            <el-button v-if="row.status === 2" type="warning" size="small" @click="handlePause(row)">
+            <el-button v-if="row.status === 1" type="warning" size="small" @click="handlePause(row)">
               暂停
             </el-button>
             <el-button type="danger" size="small" @click="handleDelete(row)">删除</el-button>
@@ -308,11 +313,11 @@ const limits = ref({
   page: 1,
 })
 const limitsAdminlist = ref({
-    limit: 10,
-    auditStatus: 2,
-    page: 1,
-    title: '',
-    status: '',
+  limit: 10,
+  auditStatus: 2,
+  page: 1,
+  title: '',
+  status: '',
 })
 const form = reactive({
   id: null,
@@ -452,7 +457,6 @@ const getProjectList = async () => {
   loading.value = true
   try {
     const res = await projectApi.getAdvertisementAdminList(limits.value)
-    console.log(res.data.data);
     tableData.value = res.data.data.list
     pagination.total = res.data.data.total
   } catch (error) {
@@ -574,7 +578,6 @@ const getParticipantStatusType = (status: string) => {
 
 const handleSearch = () => {
   projectApi.getAdvertisementAdminList(limitsAdminlist.value).then(res => {
-    console.log(res.data.data);
     tableData.value = res.data.data.list
     pagination.total = res.data.data.total
   })
@@ -644,8 +647,9 @@ const handleSubmitAudit = async (row: any) => {
       type: 'warning'
     }).then(() => {
       row.status = '1'
-      projectApi.auditProject(row.id,row).then(() => {
-        ElMessage.success('项目已提交审核')
+      projectApi.auditProject(row.id, { auditStatus: 2 }).then(() => {
+        ElMessage.success('项目已通过审核')
+        getProjectList()
       })
     })
   } catch {

@@ -31,9 +31,9 @@ service.interceptors.request.use(
     });
 
     // 添加token
-        const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (token && config.headers) {
-       config.headers['authori-zation'] = `${token}`
+      config.headers['authori-zation'] = `${token}`
     }
 
     return config;
@@ -55,7 +55,15 @@ service.interceptors.response.use(
     // 处理业务错误
     if (code !== 200) {
       ElMessage.error(message || '操作失败');
+      // 处理登录过期
+      if (code === 401) {
+        ElMessage.error(message || '登录过期，请重新登录');
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return Promise.reject(new Error(message || 'Error'));
+      }
       return Promise.reject(new Error(message || 'Error'));
+
     }
 
     return response;
@@ -71,10 +79,14 @@ service.interceptors.response.use(
 
     // 处理状态码错误
     const status = error.response.status;
+
+
     switch (status) {
       case 401:
         ElMessage.error('身份验证失败，请重新登录');
         // 这里可以添加跳转登录页逻辑
+        localStorage.removeItem('token');
+        window.location.href = '/login';
         break;
       case 403:
         ElMessage.error('权限不足，无法访问');
