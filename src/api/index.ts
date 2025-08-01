@@ -104,6 +104,10 @@ export const eventApi = {
   getEventList(params) {
     return request.get(`/api/front/activity/list?limit=${params.limit}&page=${params.page}`)
   },
+  //后台查询活动列表 /api/front/activity/adminList
+  getEventAdminList(params) {
+    return request.get(`/api/front/activity/adminList?${qs.stringify(params)}`)
+  },
   // 获取我的活动列表
   getEvents(params) {
     return request.get(`/api/front/activity/my/list?limit=${params.limit}&page=${params.page}`)
@@ -151,10 +155,6 @@ export const topicApi = {
   getTopics(uid) {
     return request.get(`/api/front/topic/list/${uid}`)
   },
-  // /api/front/course/adminList
-  getCourseAdminList() {
-    return request.get(`/api/front/course/adminList`)
-  },
   // 分页话题列表 /api/front/topic/list/page
   getTopicPage(params) {
     return request.get(`/api/front/topic/list?limit=${params.limit}&page=${params.page}`)
@@ -201,6 +201,10 @@ export const topicApi = {
 export const courseApi = {
   // 后台分页查询课程 /api/front/course/adminList
   getCourses(params) {
+    return request.get(`/api/front/course/adminList?${qs.stringify(params)}`)
+  },
+    //后台分页查询课程 /api/front/course/adminList
+  getCourseAdminList(params) {
     return request.get(`/api/front/course/adminList?${qs.stringify(params)}`)
   },
   //创建课程 /api/front/course/create

@@ -51,30 +51,31 @@
         <el-table-column label="课程信息" min-width="300">
           <template #default="{ row }">
             <div class="course-info">
-              <img :src="row.cover" alt="课程封面" class="course-cover" />
+              <video :src="'http://117.72.85.204'+row.videoUrl" alt="课程封面" class="course-cover" />
               <div class="course-details">
-                <div class="course-name">{{ row.name }}</div>
-                <div class="course-instructor">讲师：{{ row.instructor }}</div>
+                <div class="course-name">{{ row.title }}</div>
+                <div class="course-instructor">讲师：{{ row.nickname }}</div>
                 <div class="course-meta">
-                  <span class="course-duration">{{ row.duration }}课时</span>
-                  <span class="course-price">¥{{ row.price }}</span>
+                  <!-- <span class="course-duration">{{ row.duration }}课时</span> -->
+                  <span class="course-price">¥{{ row.fee }}</span>
                 </div>
               </div>
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="field" label="专业领域" width="120">
+        <el-table-column prop="typeText" label="专业领域" width="120"></el-table-column>
+        <el-table-column prop="field" label="课程类型" width="120">
           <template #default="{ row }">
-            <el-tag :type="getFieldType(row.field)  || 'primary'">
-              {{ getFieldName(row.field) }}
+            <el-tag :type="getFieldType(row.type)  || 'primary'">
+              {{ getFieldName(row.type) }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="students" label="学员数" width="80" />
-        <el-table-column prop="rating" label="评分" width="120">
+        <el-table-column prop="enrolledCount" label="学员数" width="80" />
+        <el-table-column prop="avgRating" label="评分" width="120">
           <template #default="{ row }">
             <el-rate
-              v-model="row.rating"
+              v-model="row.avgRating"
               disabled
               show-score
               text-color="#ff9900"
@@ -89,8 +90,8 @@
         </el-table-column>
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status) || 'primary'">
-              {{ getStatusName(row.status) }}
+            <el-tag :type="getStatusType(row.auditStatus) || 'primary'">
+              {{ getStatusName(row.auditStatus) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -363,7 +364,6 @@ const searchForm = reactive({
 const limits = ref({
   limit: 4,
   page: 1,
-  type: 1,
 })
 
 const tableData = ref([
@@ -417,8 +417,7 @@ const getCourseList = async () => {
   loading.value = true
   try {
     // 取消注释API调用并添加错误处理
-    const res = await courseApi.getCourses(limits.value);
-    console.log(res);
+    const res = await courseApi.getCourseAdminList(limits.value);
     tableData.value = res.data.data.list
     pagination.total = res.data.data.total
   } catch (error) {
@@ -521,31 +520,33 @@ const completedStudents = computed(() => {
 
 const getFieldName = (field: string) => {
   const map: Record<string, string> = {
-    civil: '民法典',
-    criminal: '刑法',
-    corporate: '公司法',
-    intellectual: '知识产权',
-    labor: '劳动法'
+    1: '民商法律',
+    2: '刑事法律',
+    3: '行政法律',
+    4: '知识产权',
+    5: '金融证券',
+    6: '法律英语培训'
   }
   return map[field] || field
 }
 
 const getFieldType = (field: string) => {
   const map: Record<string, string> = {
-    civil: 'primary',
-    criminal: 'danger',
-    corporate: 'warning',
-    intellectual: 'success',
-    labor: 'info'
+    1: 'primary',
+    2: 'primary',
+    3: 'primary',
+    4: 'primary',
+    5: 'primary',
+    6: 'primary'
   }
   return map[field] || ''
 }
 
 const getStatusName = (status: string) => {
   const map: Record<string, string> = {
-    published: '已发布',
-    pending: '待审核',
-    draft: '草稿',
+    0: '已提交',
+    1: '审核中',
+    2: '已审核',
     offline: '已下架'
   }
   return map[status] || status
@@ -553,9 +554,9 @@ const getStatusName = (status: string) => {
 
 const getStatusType = (status: string) => {
   const map: Record<string, string> = {
-    published: 'success',
-    pending: 'warning',
-    draft: 'info',
+    2: 'success',
+    1: 'warning',
+    0: 'info',
     offline: 'danger'
   }
   return map[status] || ''
