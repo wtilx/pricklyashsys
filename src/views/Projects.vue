@@ -126,10 +126,10 @@
         <el-row :gutter="20">
           <el-col :span="16">
             <el-form-item label="项目名称" prop="name">
-              <el-input v-model="form.name" placeholder="请输入项目名称" />
+              <el-input v-model="form.title" placeholder="请输入项目名称" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <!-- <el-col :span="8">
             <el-form-item label="项目类型" prop="type">
               <el-select v-model="form.type" placeholder="请选择项目类型">
                 <el-option label="法律援助" value="legal_aid" />
@@ -138,14 +138,14 @@
                 <el-option label="培训项目" value="training" />
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
 
         <el-form-item label="项目描述" prop="description">
-          <el-input v-model="form.description" type="textarea" :rows="3" placeholder="请输入项目描述" />
+          <el-input v-model="form.content" type="textarea" :rows="3" placeholder="请输入项目描述" />
         </el-form-item>
 
-        <el-row :gutter="20">
+        <!-- <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="项目负责人" prop="leader">
               <el-input v-model="form.leader" placeholder="请输入负责人姓名" />
@@ -156,35 +156,45 @@
               <el-input-number v-model="form.budget" :min="0" :step="1000" />
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
 
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="开始日期" prop="startDate">
-              <el-date-picker v-model="form.startDate" type="date" placeholder="选择开始日期" style="width: 100%" />
+              <el-date-picker format="YYYY-MM-DD HH:mm:ss" v-model="form.startTime" type="date" placeholder="选择开始日期"
+                style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="结束日期" prop="endDate">
-              <el-date-picker v-model="form.endDate" type="date" placeholder="选择结束日期" style="width: 100%" />
+              <el-date-picker format="YYYY-MM-DD HH:mm:ss" v-model="form.endTime" type="date" placeholder="选择结束日期"
+                style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>
 
-        <el-form-item label="项目目标">
-          <el-input v-model="form.objectives" type="textarea" :rows="3" placeholder="请输入项目目标" />
+        <el-form-item label="费用">
+          <el-input-number v-model="form.fee" :min="0" :step="1000" />
         </el-form-item>
 
-        <el-form-item label="参与要求">
-          <el-input v-model="form.requirements" type="textarea" :rows="2" placeholder="请输入参与要求" />
+        <el-form-item label="封面图" prop="status">
+          <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+            <img v-if="form.coverImage" :src="`http://117.72.85.204${form.coverImage}`" alt="项目封面图"
+              class="max-w-full h-auto" loading="lazy">
+            <!-- <ImageIcon v-else class="w-12 h-12 text-gray-400 mx-auto mb-4" /> -->
+            <p class="text-gray-500">点击上传项目图片</p>
+            <input type="file" accept="image/*" @change="handleImageUpload" class="hidden" ref="imageInput" />
+            <button type="button" @click="imageInput.click()"
+              class="mt-2 text-blue-600 hover:text-blue-700 font-medium">
+              选择文件
+            </button>
+          </div>
         </el-form-item>
-
         <el-form-item label="项目状态" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio label="ongoing" value="ongoing">进行中</el-radio>
-            <el-radio label="paused" value="paused">已暂停</el-radio>
-            <el-radio label="completed" value="completed">已完成</el-radio>
-            <el-radio label="cancelled" value="cancelled">已取消</el-radio>
+            <el-radio label="ongoing" :value="0">未开始</el-radio>
+            <el-radio label="ongoing" :value="1">进行中</el-radio>
+            <el-radio label="paused" :value="2">已结束</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -294,13 +304,14 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { Plus, Search } from '@element-plus/icons-vue'
-import { projectApi } from "../api"
+import { projectApi, uploadApi } from "../api"
 
 const loading = ref(false)
 const dialogVisible = ref(false)
 const progressDialogVisible = ref(false)
 const participantsDialogVisible = ref(false)
 const dialogTitle = ref('创建项目')
+const imageInput = ref()
 const formRef = ref<FormInstance>()
 const selectedProject = ref<any>(null)
 
@@ -322,27 +333,24 @@ const limitsAdminlist = ref({
   title: '',
   status: '',
 })
-const form = reactive({
+const form = ref({
   id: null,
-  name: '',
-  type: '',
-  description: '',
-  leader: '',
-  budget: 0,
-  startDate: '',
-  endDate: '',
-  objectives: '',
-  requirements: '',
-  status: 'ongoing'
+  "content": "",
+  "cost": 0,
+  "coverImage": "",
+  "endTime": "",
+  "fee": 0,
+  "startTime": "",
+  "status": 0,
+  "title": ""
 })
 
 const rules = {
-  name: [{ required: true, message: '请输入项目名称', trigger: 'blur' }],
-  type: [{ required: true, message: '请选择项目类型', trigger: 'change' }],
-  description: [{ required: true, message: '请输入项目描述', trigger: 'blur' }],
-  leader: [{ required: true, message: '请输入项目负责人', trigger: 'blur' }],
-  startDate: [{ required: true, message: '请选择开始日期', trigger: 'change' }],
-  endDate: [{ required: true, message: '请选择结束日期', trigger: 'change' }]
+  title: [{ required: true, message: '请输入项目名称', trigger: 'blur' }],
+  // type: [{ required: true, message: '请选择项目类型', trigger: 'change' }],
+  content: [{ required: true, message: '请输入项目描述', trigger: 'blur' }],
+  startTime: [{ required: true, message: '请选择开始日期', trigger: 'change' }],
+  endTime: [{ required: true, message: '请选择结束日期', trigger: 'change' }]
 }
 
 const pagination = reactive({
@@ -456,6 +464,22 @@ const projectParticipants = ref([
 onMounted(() => {
   getProjectList()
 })
+const handleImageUpload = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    // In a real implementation, you would upload the file and get a URL
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      uploadApi.uploadFile(file, (progress) => {
+        console.log(`Upload progress: ${progress}%`)
+      }).then(res => {
+        form.value.coverImage = res.data.url
+      })
+      // newProject.value.coverImage = e.target.result
+    }
+    reader.readAsDataURL(file)
+  }
+}
 const getProjectList = async () => {
   loading.value = true
   try {
@@ -594,7 +618,7 @@ const handleReset = () => {
     status: '',
     title: ''
   })
-   getProjectList()
+  getProjectList()
 }
 
 const handleAdd = () => {
@@ -617,7 +641,7 @@ const handleAdd = () => {
 
 const handleEdit = (row: any) => {
   dialogTitle.value = '编辑项目'
-  Object.assign(form, { ...row })
+  Object.assign(form.value, { ...row })
   dialogVisible.value = true
 }
 
@@ -718,6 +742,13 @@ const handleSubmit = async () => {
 
   await formRef.value.validate((valid) => {
     if (valid) {
+      projectApi.updateAdminProject(form.value.id,form.value).then(res => {
+        ElMessage.success('更新成功')
+        dialogVisible.value = false
+        getProjectList()
+      }).catch(() => {
+        ElMessage.error('更新失败')
+      })
       // if (form.id) {
       //   const index = tableData.value.findIndex(item => item.id === form.id)
       //   if (index > -1) {
@@ -734,7 +765,7 @@ const handleSubmit = async () => {
       //   tableData.value.unshift(newItem)
       //   ElMessage.success('创建成功')
       // }
-      dialogVisible.value = false
+
     }
   })
 }

@@ -72,7 +72,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="enrolledCount" label="学员数" width="80" />
-        <el-table-column prop="avgRating" label="评分" width="120">
+        <!-- <el-table-column prop="avgRating" label="评分" width="120">
           <template #default="{ row }">
             <el-rate
               v-model="row.avgRating"
@@ -82,7 +82,7 @@
               score-template="{value}"
             />
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column prop="completionRate" label="完成率" width="100">
           <template #default="{ row }">
             <el-progress :percentage="row.completionRate" :stroke-width="8" />
@@ -102,7 +102,7 @@
             <el-button type="info" size="small" @click="handleViewContent(row)">内容</el-button>
             <el-button type="success" size="small" @click="handleViewStudents(row)">学员</el-button>
             <el-button 
-              v-if="row.status === 'pending'" 
+              v-if="row.auditStatus === 0" 
               type="warning" 
               size="small" 
               @click="handleAudit(row)"
@@ -110,7 +110,7 @@
               审核
             </el-button>
             <el-button 
-              v-if="row.status === 'pending'" 
+              v-if="row.auditStatus === 1" 
               type="danger" 
               size="small" 
               @click="handleReject(row)"
@@ -362,10 +362,23 @@ const searchForm = reactive({
   status: ''
 })
 const limits = ref({
-  limit: 4,
+  limit: 10,
   page: 1,
 })
-
+const form = ref({
+  id: null,
+  name: '',
+  field: '',
+  instructor: '',
+  duration: 1,
+  price: 0,
+  description: '',
+  targetAudience: '',
+  objectives: '',
+  cover: '',
+  tags: '',
+  status: 'draft'
+})
 const tableData = ref([
   {
     id: 1,
@@ -426,20 +439,7 @@ const getCourseList = async () => {
     loading.value = false
   }
 }
-const form = reactive({
-  id: null,
-  name: '',
-  field: '',
-  instructor: '',
-  duration: 1,
-  price: 0,
-  description: '',
-  targetAudience: '',
-  objectives: '',
-  cover: '',
-  tags: '',
-  status: 'draft'
-})
+
 
 const rules = {
   name: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
@@ -701,15 +701,15 @@ const handleSubmit = async () => {
   
   await formRef.value.validate((valid) => {
     if (valid) {
-      if (form.id) {
-        const index = tableData.value.findIndex(item => item.id === form.id)
+      if (form.value.id) {
+        const index = tableData.value.findIndex(item => item.id === form.value.id)
         if (index > -1) {
           Object.assign(tableData.value[index], { ...form })
         }
         ElMessage.success('更新成功')
       } else {
         const newItem = {
-          ...form,
+          ...form.value,
           id: Date.now(),
           students: 0,
           rating: 5.0,

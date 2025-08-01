@@ -14,7 +14,7 @@ export const userApi = {
 // 获取用户图表数据/api/front/user/statistics/chart
 export const userChartApi = {
   // 获取用户图表数据
-  getUserChart: (data) => request.post('/api/front/user/statistics/chart',data),
+  getUserChart: (data) => request.post('/api/front/user/statistics/chart', data),
   //获取用户统计数据 /api/front/user/statistics/overview
   getUserOverview: () => request.get('/api/front/user/statistics/overview'),
 }
@@ -52,6 +52,10 @@ export const projectApi = {
   getAdvertisementAdminList(params) {
     // 使用qs.stringify优化查询字符串构建
     return request.get(`/api/front/project/adminList?${qs.stringify(params)}`);
+  },
+  //后台修改项目 /api/front/project/update
+  updateAdminProject(id,data) {
+    return request.post(`/api/front/project/update/${id}`, data)
   },
   // 分页列表
   getProjects(params) {
@@ -108,6 +112,7 @@ export const eventApi = {
   getEventAdminList(params) {
     return request.get(`/api/front/activity/adminList?${qs.stringify(params)}`)
   },
+
   // 获取我的活动列表
   getEvents(params) {
     return request.get(`/api/front/activity/my/list?limit=${params.limit}&page=${params.page}`)
@@ -199,11 +204,11 @@ export const topicApi = {
 }
 // 课程相关 API
 export const courseApi = {
-  // 后台分页查询课程 /api/front/course/adminList
+  // 后台分页查询课程 /api/front/course/list
   getCourses(params) {
-    return request.get(`/api/front/course/adminList?${qs.stringify(params)}`)
+    return request.get(`/api/front/course/list?${qs.stringify(params)}`)
   },
-    //后台分页查询课程 /api/front/course/adminList
+  //后台分页查询课程 /api/front/course/adminList
   getCourseAdminList(params) {
     return request.get(`/api/front/course/adminList?${qs.stringify(params)}`)
   },

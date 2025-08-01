@@ -49,7 +49,7 @@
               <div class="activity-details">
                 <div class="activity-name">{{ row.name }}</div>
                 <div class="activity-theme">{{ row.theme }}</div>
-                <div class="activity-speaker">主讲：{{ row.speaker }}</div>
+                <div class="activity-speaker">创建者：{{ row.speaker }}</div>
               </div>
             </div>
           </template>
