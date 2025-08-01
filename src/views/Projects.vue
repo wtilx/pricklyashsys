@@ -695,6 +695,7 @@ const handleDelete = async (row: any) => {
     }).then(() => {
       projectApi.deleteProject(row.id).then(() => {
         ElMessage.success('删除成功')
+        getProjectList()
       })
     })
   } catch {

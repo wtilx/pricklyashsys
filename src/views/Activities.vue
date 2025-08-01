@@ -45,11 +45,11 @@
         <el-table-column label="活动信息" min-width="250">
           <template #default="{ row }">
             <div class="activity-info">
-              <img :src="row.poster" alt="活动海报" class="activity-poster" />
+              <img :src="'http://117.72.85.204'+row.coverImage" alt="活动海报" class="activity-poster" />
               <div class="activity-details">
-                <div class="activity-name">{{ row.name }}</div>
-                <div class="activity-theme">{{ row.theme }}</div>
-                <div class="activity-speaker">创建者：{{ row.speaker }}</div>
+                <div class="activity-name">{{ row.title }}</div>
+                <div class="activity-theme">{{ row.content }}</div>
+                <div class="activity-speaker">创建者：{{ row.nickname }}</div>
               </div>
             </div>
           </template>
@@ -401,8 +401,8 @@ const pendingCount = computed(() => {
 
 const getTypeName = (type: string) => {
   const map: Record<string, string> = {
-    online: '线上活动',
-    offline: '线下活动',
+    0: '线上活动',
+    1: '线下活动',
     hybrid: '混合活动'
   }
   return map[type] || type
@@ -410,8 +410,8 @@ const getTypeName = (type: string) => {
 
 const getTypeColor = (type: string) => {
   const map: Record<string, string> = {
-    online: 'primary',
-    offline: 'success',
+    0: 'primary',
+    1: 'success',
     hybrid: 'warning'
   }
   return map[type] || ''
@@ -419,9 +419,9 @@ const getTypeColor = (type: string) => {
 
 const getStatusName = (status: string) => {
   const map: Record<string, string> = {
-    registering: '报名中',
-    ongoing: '进行中',
-    finished: '已结束',
+    0: '未开始',
+    1: '进行中',
+    2: '已结束',
     cancelled: '已取消'
   }
   return map[status] || status
@@ -429,9 +429,9 @@ const getStatusName = (status: string) => {
 
 const getStatusType = (status: string) => {
   const map: Record<string, string> = {
-    registering: 'primary',
-    ongoing: 'success',
-    finished: 'info',
+    0: 'primary',
+    1: 'success',
+    2: 'info',
     cancelled: 'danger'
   }
   return map[status] || ''
