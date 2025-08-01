@@ -14,22 +14,22 @@
       <div class="search-bar">
         <el-form :model="searchForm" inline>
           <el-form-item label="项目名称">
-            <el-input v-model="searchForm.name" placeholder="请输入项目名称" clearable style="width: 200px" />
+            <el-input v-model="searchForm.title" placeholder="请输入项目名称" clearable style="width: 200px" />
           </el-form-item>
           <el-form-item label="项目类型">
-            <el-select v-model="searchForm.type" placeholder="请选择类型" clearable style="width: 150px">
-              <el-option label="法律援助" value="legal_aid" />
-              <el-option label="法律研究" value="research" />
-              <el-option label="公益项目" value="public_welfare" />
-              <el-option label="培训项目" value="training" />
+            <el-select v-model="searchForm.auditStatus" placeholder="审核状态" clearable style="width: 150px">
+              <el-option label="已提交" :value="0" />
+              <el-option label="审核中" :value="1" />
+              <el-option label="已审核" :value="2" />
+              <!-- <el-option label="培训项目" value="training" /> -->
             </el-select>
           </el-form-item>
           <el-form-item label="项目状态">
-            <el-select v-model="searchForm.status" placeholder="请选择状态" clearable style="width: 120px">
-              <el-option label="进行中" value="ongoing" />
-              <el-option label="已完成" value="completed" />
-              <el-option label="已暂停" value="paused" />
-              <el-option label="已取消" value="cancelled" />
+            <el-select v-model="searchForm.status" placeholder="状态" clearable style="width: 120px">
+              <el-option label="未开始" :value="0" />
+              <el-option label="进行中" :value="1" />
+              <el-option label="已结束" :value="2" />
+              <!-- <el-option label="已取消" value="cancelled" /> -->
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -59,9 +59,10 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="type" label="项目图片" width="100" >
+        <el-table-column prop="type" label="项目图片" width="100">
           <template #default="{ row }">
-            <el-image :src="'http://117.72.85.204'+row.coverImage" :preview-src-list="['http://117.72.85.204'+row.coverImage]" fit="cover" />
+            <el-image :src="'http://117.72.85.204' + row.coverImage"
+              :preview-src-list="['http://117.72.85.204' + row.coverImage]" fit="cover" />
           </template>
         </el-table-column>
         <el-table-column prop="enrolledCount" label="参与人数" width="100" />
@@ -304,9 +305,11 @@ const formRef = ref<FormInstance>()
 const selectedProject = ref<any>(null)
 
 const searchForm = reactive({
-  name: '',
-  type: '',
-  status: ''
+  limit: 10,
+  page: 1,
+  auditStatus: '',
+  status: '',
+  title: ''
 })
 const limits = ref({
   limit: 10,
@@ -585,10 +588,13 @@ const handleSearch = () => {
 
 const handleReset = () => {
   Object.assign(searchForm, {
-    name: '',
-    type: '',
-    status: ''
+    limit: 10,
+    page: 1,
+    auditStatus: '',
+    status: '',
+    title: ''
   })
+   getProjectList()
 }
 
 const handleAdd = () => {

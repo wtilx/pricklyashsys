@@ -199,9 +199,9 @@ export const topicApi = {
 }
 // 课程相关 API
 export const courseApi = {
-  // 获取课程列表
+  // 后台分页查询课程 /api/front/course/adminList
   getCourses(params) {
-    return request.get(`/api/front/course/list?type=${params.type}&limit=${params.limit}&page=${params.page}`)
+    return request.get(`/api/front/course/adminList?${qs.stringify(params)}`)
   },
   //创建课程 /api/front/course/create
   createCourse(data) {
