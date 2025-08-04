@@ -203,6 +203,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { Plus, Search } from '@element-plus/icons-vue'
+import { topicApi } from '@/api'
 
 const loading = ref(false)
 const dialogVisible = ref(false)
@@ -295,6 +296,24 @@ const repliesData = ref([
     status: 'pending'
   }
 ])
+onMounted(() => {
+  getTopics()
+})
+const getTopics = async () => {
+  loading.value = true
+  try {
+    const res = await topicApi.getTopicPage({
+      page: pagination.currentPage,
+      limit: pagination.pageSize,
+    })
+    console.log(res.data);
+    
+    tableData.value = res.data.data.list
+    pagination.total = res.data.data.total
+  } finally {
+    loading.value = false
+  }
+}
 
 const getCategoryType = (category: string) => {
   const map: Record<string, string> = {
