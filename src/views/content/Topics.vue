@@ -306,8 +306,6 @@ const getTopics = async () => {
       page: pagination.currentPage,
       limit: pagination.pageSize,
     })
-    console.log(res.data);
-    
     tableData.value = res.data.data.list
     pagination.total = res.data.data.total
   } finally {

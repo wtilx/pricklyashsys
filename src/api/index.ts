@@ -9,6 +9,14 @@ export const userApi = {
   getPepper: () => request.get(' /api/front/user'),
   // 退出登录 /api/front/logout
   logout: () => request.get('/api/front/logout'),
+  //会员数据统计 /api/front/member/statistics
+  getMemberStatistics: () => request.get('/api/front/member/statistics'),
+  //查询会员信息 /api/front/query/member
+  getMemberInfo: (params) => request.get(`/api/front/query/member?${qs.stringify(params)}`),
+  //编辑用户信息 /api/front/user/update
+  updateUserInfo: (data) => request.post('/api/front/user/update', data),
+  // 分页查询会员中心数据/api/front/userCenterPage
+  getUserCenterPage: (data) => request.post('/api/front/userCenterPage', data),
 }
 
 // 获取用户图表数据/api/front/user/statistics/chart

@@ -239,6 +239,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
 import { Plus, Search, Download, Star } from '@element-plus/icons-vue'
+import { userApi } from '@/api'
 // Crown
 const loading = ref(false)
 const dialogVisible = ref(false)
@@ -247,7 +248,8 @@ const dialogTitle = ref('添加会员')
 const formRef = ref<FormInstance>()
 const selectedMember = ref<any>(null)
 
-const memberStats = [
+const memberStats = ref(
+  [
   {
     title: '总会员数',
     value: '12,345',
@@ -273,6 +275,7 @@ const memberStats = [
     color: '#f5222d'
   }
 ]
+)
 
 const searchForm = reactive({
   username: '',
@@ -370,6 +373,37 @@ const memberActivities = ref([
     time: '2024-01-13 09:45'
   }
 ])
+
+const limits = ref({
+  page: 1,
+  size: 10
+})
+
+onMounted( () => {
+   getMemberInfo()
+   getMemberStatistics()
+})
+
+const getMemberInfo = async () => {
+  try {
+    const res = await userApi.getMemberInfo(limits.value)
+    selectedMember.value = res.data
+  } catch (error) {
+    ElMessage.error('获取会员信息失败')
+  }
+}
+
+const getMemberStatistics=async()=>{
+  try {
+    const res = await userApi.getMemberStatistics()
+    memberStats.value[0].value=res.data.data.total
+    memberStats.value[1].value=res.data.data.vip
+    memberStats.value[2].value=res.data.data.today
+    memberStats.value[3].value=res.data.data.active
+  } catch (error) {
+    ElMessage.error('获取会员统计失败')
+  }
+}
 
 const getLevelName = (level: string) => {
   const map: Record<string, string> = {
