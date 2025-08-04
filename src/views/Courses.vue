@@ -88,6 +88,28 @@
             <el-progress :percentage="row.completionRate" :stroke-width="8" />
           </template>
         </el-table-column>
+        <el-table-column label="审核" width="80">
+          <template #default="{ row }">
+            <el-button 
+              v-if="row.auditStatus === 0" 
+              type="warning" 
+              size="small" 
+              @click="handleAudit(row)"
+            >
+              审核
+            </el-button>
+            <el-button 
+              v-if="row.auditStatus === 1" 
+              type="danger" 
+              size="small" 
+              @click="handleReject(row)"
+            >
+              驳回
+            </el-button>
+            <span v-else-if="row.auditStatus === 2" class="text-success">已审核</span>
+            <span v-else>-</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
             <el-tag :type="getStatusType(row.auditStatus) || 'primary'">

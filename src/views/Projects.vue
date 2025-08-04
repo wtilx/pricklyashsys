@@ -101,12 +101,17 @@
         </el-table-column>
         <el-table-column label="操作" width="250" fixed="right">
           <template #default="{ row }">
-            <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
+            <!-- <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button> -->
             <el-button type="info" size="small" @click="handleViewProgress(row)">进度</el-button>
             <el-button type="success" size="small" @click="handleManageParticipants(row)">成员</el-button>
-            <el-button v-if="row.status === 1" type="warning" size="small" @click="handlePause(row)">
-              暂停
-            </el-button>
+       
+              <el-button v-if="row.status === 1" type="warning" size="small" @click="handlePause(row)">
+                暂停
+              </el-button>
+              <el-button v-else-if="row.status === 0" type="primary" size="small" @click="handleResume(row)">
+                开始
+              </el-button>
+           
             <el-button type="danger" size="small" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -654,7 +659,20 @@ const handleManageParticipants = (row: any) => {
   selectedProject.value = row
   participantsDialogVisible.value = true
 }
+const handleResume = async (row: any) => {
+  try {
+    await ElMessageBox.confirm('确认恢复该项目吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
 
+    row.status = '1'
+    ElMessage.success('项目已恢复')
+  } catch {
+    // 用户取消
+  }
+}
 const handlePause = async (row: any) => {
   try {
     await ElMessageBox.confirm('确认暂停该项目吗？', '提示', {
