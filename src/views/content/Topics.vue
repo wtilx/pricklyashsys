@@ -47,31 +47,32 @@
         <el-table-column type="selection" width="55" />
         <el-table-column prop="id" label="ID" width="80" />
         <el-table-column prop="title" label="话题标题" min-width="200" show-overflow-tooltip />
-        <el-table-column prop="category" label="分类" width="120">
+        <el-table-column prop="content" label="话题标题" min-width="200" show-overflow-tooltip />
+        <!-- <el-table-column prop="category" label="分类" width="120">
           <template #default="{ row }">
             <el-tag :type="getCategoryType(row.category) || 'primary'">
               {{ row.category }}
             </el-tag>
           </template>
-        </el-table-column>
-        <el-table-column prop="creator" label="创建者" width="100" />
+        </el-table-column> -->
+        <el-table-column prop="nickname" label="创建者" width="100" />
         <el-table-column prop="participants" label="参与人数" width="100" />
-        <el-table-column prop="replies" label="回复数" width="80" />
-        <el-table-column prop="views" label="浏览量" width="80" />
-        <el-table-column prop="heat" label="热度" width="80">
+        <el-table-column prop="commentCount" label="回复数" width="80" />
+        <el-table-column prop="favoriteCount" label="浏览量" width="80" />
+        <!-- <el-table-column prop="heat" label="热度" width="80">
           <template #default="{ row }">
             <el-tag :type="getHeatType(row.heat) || 'primary'" size="small">
               {{ getHeatName(row.heat) }}
             </el-tag>
           </template>
-        </el-table-column>
-        <el-table-column prop="status" label="状态" width="100">
+        </el-table-column> -->
+        <!-- <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
             <el-tag :type="getStatusType(row.status) || 'primary'">
               {{ getStatusName(row.status) }}
             </el-tag>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column prop="createTime" label="创建时间" width="150" />
         <el-table-column label="操作" width="220" fixed="right">
           <template #default="{ row }">
@@ -119,7 +120,7 @@
         <el-form-item label="话题标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入话题标题" />
         </el-form-item>
-        <el-form-item label="分类" prop="category">
+        <!-- <el-form-item label="分类" prop="category">
           <el-select v-model="form.category" placeholder="请选择分类">
             <el-option label="法律咨询" value="法律咨询" />
             <el-option label="案例讨论" value="案例讨论" />
@@ -127,33 +128,33 @@
             <el-option label="学术交流" value="学术交流" />
             <el-option label="实务经验" value="实务经验" />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="话题描述" prop="description">
           <el-input
-            v-model="form.description"
+            v-model="form.content"
             type="textarea"
             :rows="4"
             placeholder="请输入话题描述"
           />
         </el-form-item>
-        <el-form-item label="相关标签" prop="tags">
+        <!-- <el-form-item label="相关标签" prop="tags">
           <el-input v-model="form.tags" placeholder="请输入标签，多个标签用逗号分隔" />
-        </el-form-item>
-        <el-form-item label="话题状态" prop="status">
+        </el-form-item> -->
+        <!-- <el-form-item label="话题状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio label="active" value="active">进行中</el-radio>
             <el-radio label="closed" value="closed">已结束</el-radio>
             <el-radio label="pinned" value="pinned">置顶</el-radio>
           </el-radio-group>
-        </el-form-item>
-        <el-form-item label="讨论规则">
+        </el-form-item> -->
+        <!-- <el-form-item label="讨论规则">
           <el-checkbox-group v-model="form.rules">
             <el-checkbox label="实名讨论" value="实名讨论">实名讨论</el-checkbox>
             <el-checkbox label="禁止匿名" value="禁止匿名">禁止匿名</el-checkbox>
             <el-checkbox label="需要审核" value="需要审核">回复需要审核</el-checkbox>
             <el-checkbox label="专家优先" value="专家优先">专家回复优先显示</el-checkbox>
           </el-checkbox-group>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       
       <template #footer>
@@ -224,7 +225,8 @@ const form = reactive({
   description: '',
   tags: '',
   status: 'active',
-  rules: []
+  rules: [],
+  content: ''
 })
 
 const rules = {
@@ -437,17 +439,21 @@ const handleDeleteReply = async (row: any) => {
 
 const handleDelete = async (row: any) => {
   try {
-    await ElMessageBox.confirm('确认删除该话题吗？', '提示', {
+     ElMessageBox.confirm('确认删除该话题吗？', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
+    }).then(async () => {
+      topicApi.deleteTopic({ id: row.id }).then(() => {
+        ElMessage.success('删除成功')
+      })
     })
     
-    const index = tableData.value.findIndex(item => item.id === row.id)
-    if (index > -1) {
-      tableData.value.splice(index, 1)
-    }
-    ElMessage.success('删除成功')
+    // const index = tableData.value.findIndex(item => item.id === row.id)
+    // if (index > -1) {
+    //   tableData.value.splice(index, 1)
+    // }
+    // ElMessage.success('删除成功')
   } catch {
     // 用户取消
   }
