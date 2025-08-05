@@ -20,7 +20,9 @@
         <el-col :xs="12" :sm="6" v-for="stat in memberStats" :key="stat.title">
           <div class="stat-card">
             <div class="stat-icon" :style="{ backgroundColor: stat.color }">
-              <el-icon :size="20"><component :is="stat.icon" /></el-icon>
+              <el-icon :size="20">
+                <component :is="stat.icon" />
+              </el-icon>
             </div>
             <div class="stat-content">
               <div class="stat-value">{{ stat.value }}</div>
@@ -34,20 +36,10 @@
       <div class="search-bar">
         <el-form :model="searchForm" inline>
           <el-form-item label="用户名">
-            <el-input
-              v-model="searchForm.username"
-              placeholder="请输入用户名"
-              clearable
-              style="width: 150px"
-            />
+            <el-input v-model="searchForm.username" placeholder="请输入用户名" clearable style="width: 150px" />
           </el-form-item>
           <el-form-item label="手机号">
-            <el-input
-              v-model="searchForm.phone"
-              placeholder="请输入手机号"
-              clearable
-              style="width: 150px"
-            />
+            <el-input v-model="searchForm.phone" placeholder="请输入手机号" clearable style="width: 150px" />
           </el-form-item>
           <el-form-item label="会员等级">
             <el-select v-model="searchForm.level" placeholder="请选择等级" clearable style="width: 120px">
@@ -77,25 +69,24 @@
         <el-table-column label="用户信息" min-width="200">
           <template #default="{ row }">
             <div class="user-info">
-              <el-avatar :src="row.avatar" :size="40" />
+              <el-avatar :src="'http://117.72.85.204' + row.avatar" :size="40" />
               <div class="user-details">
-                <div class="username">{{ row.username }}</div>
+                <div class="username">{{ row.account }}</div>
                 <div class="phone">{{ row.phone }}</div>
               </div>
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="email" label="邮箱" width="180" show-overflow-tooltip />
-        <el-table-column prop="level" label="会员等级" width="120">
+        <el-table-column prop="nickname" label="匿名" width="180" show-overflow-tooltip />
+        <el-table-column prop="createTime" label="注册时间" width="180" show-overflow-tooltip />
+        <el-table-column prop="level" label="性别" width="120">
           <template #default="{ row }">
-            <el-tag :type="getLevelType(row.level) || 'primary'" :icon="getLevelIcon(row.level)">
-              {{ getLevelName(row.level) }}
-            </el-tag>
+            {{ row.sex === 1 ? '男' : '女' }}
           </template>
         </el-table-column>
-        <el-table-column prop="points" label="积分" width="80" />
-        <el-table-column prop="loginCount" label="登录次数" width="100" />
-        <el-table-column prop="lastLogin" label="最后登录" width="150" />
+        <el-table-column prop="integral" label="积分" width="80" />
+        <!-- <el-table-column prop="loginCount" label="登录次数" width="100" />
+        <el-table-column prop="lastLogin" label="最后登录" width="150" /> -->
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
             <el-tag :type="getStatusType(row.status) || 'primary'">
@@ -107,11 +98,8 @@
         <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
-            <el-button 
-              :type="row.status === 'active' ? 'warning' : 'success'" 
-              size="small" 
-              @click="handleToggleStatus(row)"
-            >
+            <el-button :type="row.status === 'active' ? 'warning' : 'success'" size="small"
+              @click="handleToggleStatus(row)">
               {{ row.status === 'active' ? '禁用' : '启用' }}
             </el-button>
             <el-button type="info" size="small" @click="handleViewDetails(row)">详情</el-button>
@@ -121,31 +109,15 @@
 
       <!-- 分页 -->
       <div class="pagination">
-        <el-pagination
-          v-model:current-page="pagination.currentPage"
-          v-model:page-size="pagination.pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          :total="pagination.total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+        <el-pagination v-model:current-page="pagination.currentPage" v-model:page-size="pagination.pageSize"
+          :page-sizes="[10, 20, 50, 100]" :total="pagination.total" layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange" @current-change="handleCurrentChange" />
       </div>
     </el-card>
 
     <!-- 编辑对话框 -->
-    <el-dialog
-      v-model="dialogVisible"
-      :title="dialogTitle"
-      width="600px"
-      @close="handleDialogClose"
-    >
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        label-width="100px"
-      >
+    <el-dialog v-model="dialogVisible" :title="dialogTitle" width="600px" @close="handleDialogClose">
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="form.username" placeholder="请输入用户名" />
         </el-form-item>
@@ -173,15 +145,10 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input
-            v-model="form.remark"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入备注信息"
-          />
+          <el-input v-model="form.remark" type="textarea" :rows="3" placeholder="请输入备注信息" />
         </el-form-item>
       </el-form>
-      
+
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="handleSubmit">确定</el-button>
@@ -189,11 +156,7 @@
     </el-dialog>
 
     <!-- 详情对话框 -->
-    <el-dialog
-      v-model="detailsDialogVisible"
-      title="会员详情"
-      width="800px"
-    >
+    <el-dialog v-model="detailsDialogVisible" title="会员详情" width="800px">
       <div class="member-details" v-if="selectedMember">
         <el-descriptions :column="2" border>
           <el-descriptions-item label="用户头像">
@@ -217,15 +180,11 @@
             </el-tag>
           </el-descriptions-item>
         </el-descriptions>
-        
+
         <div class="activity-section">
           <h4>最近活动</h4>
           <el-timeline>
-            <el-timeline-item
-              v-for="activity in memberActivities"
-              :key="activity.id"
-              :timestamp="activity.time"
-            >
+            <el-timeline-item v-for="activity in memberActivities" :key="activity.id" :timestamp="activity.time">
               {{ activity.description }}
             </el-timeline-item>
           </el-timeline>
@@ -250,31 +209,31 @@ const selectedMember = ref<any>(null)
 
 const memberStats = ref(
   [
-  {
-    title: '总会员数',
-    value: '12,345',
-    icon: 'User',
-    color: '#1890ff'
-  },
-  {
-    title: 'VIP会员',
-    value: '1,234',
-    icon: 'Star',
-    color: '#52c41a'
-  },
-  {
-    title: '今日新增',
-    value: '89',
-    icon: 'UserFilled',
-    color: '#faad14'
-  },
-  {
-    title: '活跃会员',
-    value: '8,765',
-    icon: 'TrendCharts',
-    color: '#f5222d'
-  }
-]
+    {
+      title: '总会员数',
+      value: '12,345',
+      icon: 'User',
+      color: '#1890ff'
+    },
+    {
+      title: 'VIP会员',
+      value: '1,234',
+      icon: 'Star',
+      color: '#52c41a'
+    },
+    {
+      title: '今日新增',
+      value: '89',
+      icon: 'UserFilled',
+      color: '#faad14'
+    },
+    {
+      title: '活跃会员',
+      value: '8,765',
+      icon: 'TrendCharts',
+      color: '#f5222d'
+    }
+  ]
 )
 
 const searchForm = reactive({
@@ -376,30 +335,31 @@ const memberActivities = ref([
 
 const limits = ref({
   page: 1,
-  size: 10
+  size: 1000
 })
 
-onMounted( () => {
-   getMemberInfo()
-   getMemberStatistics()
+onMounted(() => {
+  getMemberInfo()
+  getMemberStatistics()
 })
 
 const getMemberInfo = async () => {
   try {
     const res = await userApi.getMemberInfo(limits.value)
-    selectedMember.value = res.data
+    tableData.value = res.data.data.list
+    pagination.total = tableData.value.length
   } catch (error) {
     ElMessage.error('获取会员信息失败')
   }
 }
 
-const getMemberStatistics=async()=>{
+const getMemberStatistics = async () => {
   try {
     const res = await userApi.getMemberStatistics()
-    memberStats.value[0].value=res.data.data.total
-    memberStats.value[1].value=res.data.data.vip
-    memberStats.value[2].value=res.data.data.today
-    memberStats.value[3].value=res.data.data.active
+    memberStats.value[0].value = res.data.data.total
+    memberStats.value[1].value = res.data.data.vip
+    memberStats.value[2].value = res.data.data.today
+    memberStats.value[3].value = res.data.data.active
   } catch (error) {
     ElMessage.error('获取会员统计失败')
   }
@@ -434,8 +394,8 @@ const getLevelIcon = (level: string) => {
 
 const getStatusName = (status: string) => {
   const map: Record<string, string> = {
-    active: '正常',
-    disabled: '禁用',
+    true: '正常',
+    false: '禁用',
     frozen: '冻结'
   }
   return map[status] || status
@@ -496,7 +456,7 @@ const handleToggleStatus = async (row: any) => {
       cancelButtonText: '取消',
       type: 'warning'
     })
-    
+
     row.status = row.status === 'active' ? 'disabled' : 'active'
     ElMessage.success(`${action}成功`)
   } catch {
@@ -511,7 +471,7 @@ const handleViewDetails = (row: any) => {
 
 const handleSubmit = async () => {
   if (!formRef.value) return
-  
+
   await formRef.value.validate((valid) => {
     if (valid) {
       if (form.id) {
@@ -549,9 +509,9 @@ const handleCurrentChange = (page: number) => {
   pagination.currentPage = page
 }
 
-onMounted(() => {
-  pagination.total = tableData.value.length
-})
+// onMounted(() => {
+//   pagination.total = tableData.value.length
+// })
 </script>
 
 <style scoped>
@@ -662,16 +622,16 @@ onMounted(() => {
   .stats-row {
     flex-direction: column;
   }
-  
+
   .search-bar :deep(.el-form) {
     flex-direction: column;
   }
-  
+
   .search-bar :deep(.el-form-item) {
     margin-right: 0;
     margin-bottom: 10px;
   }
-  
+
   .header-actions {
     flex-direction: column;
     gap: 8px;

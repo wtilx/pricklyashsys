@@ -56,12 +56,12 @@ const router = createRouter({
               component: () => import('../views/users/Members.vue'),
               meta: { title: '会员管理', icon: 'UserFilled' }
             },
-            {
-              path: '/users/experts',
-              name: 'Experts',
-              component: () => import('../views/users/Experts.vue'),
-              meta: { title: '专家管理', icon: 'Avatar' }
-            }
+            // {
+            //   path: '/users/experts',
+            //   name: 'Experts',
+            //   component: () => import('../views/users/Experts.vue'),
+            //   meta: { title: '专家管理', icon: 'Avatar' }
+            // }
           ]
         },
         {
