@@ -236,11 +236,13 @@ const memberStats = ref(
   ]
 )
 
-const searchForm = reactive({
+const searchForm = ref({
   username: '',
   phone: '',
   level: '',
-  status: ''
+  status: '',
+  pageNum: 1,
+  pageSize: 10
 })
 
 const form = reactive({
@@ -411,11 +413,16 @@ const getStatusType = (status: string) => {
 }
 
 const handleSearch = () => {
-  ElMessage.info('搜索功能开发中...')
+  // ElMessage.info('搜索功能开发中...')
+  userApi.getUserCenterPage(searchForm.value).then(res => {
+    tableData.value = res.data.data.list
+    pagination.total = tableData.value.length
+  })
+
 }
 
 const handleReset = () => {
-  Object.assign(searchForm, {
+  Object.assign(searchForm.value, {
     username: '',
     phone: '',
     level: '',
