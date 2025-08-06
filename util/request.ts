@@ -49,11 +49,12 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
     loadingInstance?.close();
-
     const { code, data, message } = response.data;
-
     // 处理业务错误
     if (code !== 200) {
+      if (code === undefined) {
+        return response
+      }
       ElMessage.error(message || '操作失败');
       // 处理登录过期
       if (code === 401) {
@@ -63,9 +64,9 @@ service.interceptors.response.use(
         return Promise.reject(new Error(message || 'Error'));
       }
       return Promise.reject(new Error(message || 'Error'));
-
+    } else if (code === 200) {
+      return response
     }
-
     return response;
   },
   (error: AxiosError) => {

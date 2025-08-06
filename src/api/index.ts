@@ -16,7 +16,7 @@ export const userApi = {
   //编辑用户信息 /api/front/user/update
   updateUserInfo: (data) => request.post('/api/front/user/update', data),
   // 分页查询会员中心数据/api/front/userCenterPage
-  getUserCenterPage: (data) => request.post('/api/front/userCenterPage', data),
+  getUserCenterPage: (params) => request.get('/api/front/userCenterPage', {params}),
 }
 
 // 获取用户图表数据/api/front/user/statistics/chart

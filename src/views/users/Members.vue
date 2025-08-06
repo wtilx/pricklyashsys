@@ -415,7 +415,7 @@ const getStatusType = (status: string) => {
 const handleSearch = () => {
   // ElMessage.info('搜索功能开发中...')
   userApi.getUserCenterPage(searchForm.value).then(res => {
-    tableData.value = res.data.data.list
+    tableData.value = res.data.list
     pagination.total = tableData.value.length
   })
 
@@ -428,6 +428,7 @@ const handleReset = () => {
     level: '',
     status: ''
   })
+  getMemberInfo()
 }
 
 const handleExport = () => {
