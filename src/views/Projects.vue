@@ -61,8 +61,8 @@
         </el-table-column>
         <el-table-column prop="type" label="项目图片" width="100">
           <template #default="{ row }">
-            <el-image :src="'http://117.72.85.204' + row.coverImage"
-              :preview-src-list="['http://117.72.85.204' + row.coverImage]" fit="cover" />
+            <!-- fit="cover" :preview-src-list="['http://117.72.85.204' + row.coverImage]" fit="cover"-->
+            <el-image :src="'http://117.72.85.204' + row.coverImage" :preview-src-list="['http://117.72.85.204' + row.coverImage]" />
           </template>
         </el-table-column>
         <el-table-column prop="enrolledCount" label="参与人数" width="100" />
