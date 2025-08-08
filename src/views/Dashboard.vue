@@ -465,7 +465,7 @@ const todoList = [
 }
 
 .todo-badge {
-  width: 100%;
+  width: 97%;
 }
 
 .todo-content {
