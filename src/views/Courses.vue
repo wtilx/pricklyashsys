@@ -14,12 +14,7 @@
       <div class="search-bar">
         <el-form :model="searchForm" inline>
           <el-form-item label="课程名称">
-            <el-input
-              v-model="searchForm.name"
-              placeholder="请输入课程名称"
-              clearable
-              style="width: 200px"
-            />
+            <el-input v-model="searchForm.name" placeholder="请输入课程名称" clearable style="width: 200px" />
           </el-form-item>
           <el-form-item label="专业领域">
             <el-select v-model="searchForm.field" placeholder="请选择领域" clearable style="width: 150px">
@@ -51,7 +46,7 @@
         <el-table-column label="课程信息" min-width="300">
           <template #default="{ row }">
             <div class="course-info">
-              <video :src="'http://117.72.85.204'+row.videoUrl" alt="课程封面" class="course-cover" />
+              <video :src="'http://117.72.85.204' + row.videoUrl" alt="课程封面" class="course-cover" />
               <div class="course-details">
                 <div class="course-name">{{ row.title }}</div>
                 <div class="course-instructor">讲师：{{ row.nickname }}</div>
@@ -66,7 +61,7 @@
         <el-table-column prop="typeText" label="专业领域" width="120"></el-table-column>
         <el-table-column prop="field" label="课程类型" width="120">
           <template #default="{ row }">
-            <el-tag :type="getFieldType(row.type)  || 'primary'">
+            <el-tag :type="getFieldType(row.type) || 'primary'">
               {{ getFieldName(row.type) }}
             </el-tag>
           </template>
@@ -90,20 +85,10 @@
         </el-table-column>
         <el-table-column label="审核" width="80">
           <template #default="{ row }">
-            <el-button 
-              v-if="row.auditStatus === 0" 
-              type="warning" 
-              size="small" 
-              @click="handleAudit(row)"
-            >
+            <el-button v-if="row.auditStatus === 0" type="warning" size="small" @click="handleAudit(row)">
               审核
             </el-button>
-            <el-button 
-              v-if="row.auditStatus === 1" 
-              type="danger" 
-              size="small" 
-              @click="handleReject(row)"
-            >
+            <el-button v-if="row.auditStatus === 1" type="danger" size="small" @click="handleReject(row)">
               驳回
             </el-button>
             <span v-else-if="row.auditStatus === 2" class="text-success">已审核</span>
@@ -123,20 +108,10 @@
             <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
             <el-button type="info" size="small" @click="handleViewContent(row)">内容</el-button>
             <el-button type="success" size="small" @click="handleViewStudents(row)">学员</el-button>
-            <el-button 
-              v-if="row.auditStatus === 0" 
-              type="warning" 
-              size="small" 
-              @click="handleAudit(row)"
-            >
+            <el-button v-if="row.auditStatus === 0" type="warning" size="small" @click="handleAudit(row)">
               审核
             </el-button>
-            <el-button 
-              v-if="row.auditStatus === 1" 
-              type="danger" 
-              size="small" 
-              @click="handleReject(row)"
-            >
+            <el-button v-if="row.auditStatus === 1" type="danger" size="small" @click="handleReject(row)">
               驳回
             </el-button>
             <el-button type="danger" size="small" @click="handleDelete(row)">删除</el-button>
@@ -146,31 +121,15 @@
 
       <!-- 分页 -->
       <div class="pagination">
-        <el-pagination
-          v-model:current-page="pagination.currentPage"
-          v-model:page-size="pagination.pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          :total="pagination.total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+        <el-pagination v-model:current-page="pagination.currentPage" v-model:page-size="pagination.pageSize"
+          :page-sizes="[10, 20, 50, 100]" :total="pagination.total" layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange" @current-change="handleCurrentChange" />
       </div>
     </el-card>
 
     <!-- 编辑对话框 -->
-    <el-dialog
-      v-model="dialogVisible"
-      :title="dialogTitle"
-      width="900px"
-      @close="handleDialogClose"
-    >
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        label-width="100px"
-      >
+    <el-dialog v-model="dialogVisible" :title="dialogTitle" width="900px" @close="handleDialogClose">
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
         <el-row :gutter="20">
           <el-col :span="16">
             <el-form-item label="课程名称" prop="name">
@@ -214,41 +173,23 @@
         </el-row>
 
         <el-form-item label="课程简介" prop="description">
-          <el-input
-            v-model="form.description"
-            type="textarea"
-            :rows="4"
-            placeholder="请输入课程简介"
-          />
+          <el-input v-model="form.description" type="textarea" :rows="4" placeholder="请输入课程简介" />
         </el-form-item>
 
         <el-form-item label="适合人群" prop="targetAudience">
-          <el-input
-            v-model="form.targetAudience"
-            type="textarea"
-            :rows="2"
-            placeholder="请输入适合人群"
-          />
+          <el-input v-model="form.targetAudience" type="textarea" :rows="2" placeholder="请输入适合人群" />
         </el-form-item>
 
         <el-form-item label="学习目标">
-          <el-input
-            v-model="form.objectives"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入学习目标"
-          />
+          <el-input v-model="form.objectives" type="textarea" :rows="3" placeholder="请输入学习目标" />
         </el-form-item>
 
         <el-form-item label="课程封面">
-          <el-upload
-            class="cover-uploader"
-            action="#"
-            :show-file-list="false"
-            :auto-upload="false"
-          >
+          <el-upload class="cover-uploader" action="#" :show-file-list="false" :auto-upload="false">
             <img v-if="form.cover" :src="form.cover" class="cover-preview" />
-            <el-icon v-else class="cover-uploader-icon"><Plus /></el-icon>
+            <el-icon v-else class="cover-uploader-icon">
+              <Plus />
+            </el-icon>
           </el-upload>
         </el-form-item>
 
@@ -264,7 +205,7 @@
           </el-radio-group>
         </el-form-item>
       </el-form>
-      
+
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="handleSubmit">确定</el-button>
@@ -272,11 +213,7 @@
     </el-dialog>
 
     <!-- 课程内容管理对话框 -->
-    <el-dialog
-      v-model="contentDialogVisible"
-      title="课程内容管理"
-      width="1000px"
-    >
+    <el-dialog v-model="contentDialogVisible" title="课程内容管理" width="1000px">
       <div class="content-management">
         <div class="content-header">
           <h4>{{ selectedCourse?.name }} - 课程内容</h4>
@@ -308,11 +245,7 @@
     </el-dialog>
 
     <!-- 学员管理对话框 -->
-    <el-dialog
-      v-model="studentsDialogVisible"
-      title="学员管理"
-      width="1000px"
-    >
+    <el-dialog v-model="studentsDialogVisible" title="学员管理" width="1000px">
       <div class="students-stats">
         <el-row :gutter="20">
           <el-col :span="6">
@@ -658,7 +591,7 @@ const handleAudit = async (row: any) => {
       cancelButtonText: '取消',
       type: 'warning'
     })
-    
+
     row.status = 'published'
     ElMessage.success('审核通过')
   } catch {
@@ -673,7 +606,7 @@ const handleDelete = async (row: any) => {
       cancelButtonText: '取消',
       type: 'warning'
     })
-    
+
     const index = tableData.value.findIndex(item => item.id === row.id)
     if (index > -1) {
       tableData.value.splice(index, 1)
@@ -696,31 +629,29 @@ const handlePreview = (_row: any) => {
   ElMessage.info('预览功能开发中...')
 }
 
-const handleDeleteChapter = async (row: any) => {
+const handleDeleteChapter = (row: any) => {
   try {
-    await ElMessageBox.confirm('确认删除该章节吗？', '提示', {
+    ElMessageBox.confirm('确认删除该章节吗？', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
+    }).then(() => {
+      courseApi.deleteCourse(row.id).then(() => {
+        ElMessage.success('删除成功')
+      })
     })
-    
-    const index = chaptersData.value.findIndex(item => item.id === row.id)
-    if (index > -1) {
-      chaptersData.value.splice(index, 1)
-    }
-    ElMessage.success('删除成功')
   } catch {
     // 用户取消
   }
 }
 
 const handleViewStudentDetail = (row: any) => {
-  ElMessage.info('学员详情功能开发中...',row)
+  ElMessage.info('学员详情功能开发中...', row)
 }
 
 const handleSubmit = async () => {
   if (!formRef.value) return
-  
+
   await formRef.value.validate((valid) => {
     if (valid) {
       if (form.value.id) {
@@ -915,12 +846,12 @@ const handleReject = async (row: any) => {
   .search-bar :deep(.el-form) {
     flex-direction: column;
   }
-  
+
   .search-bar :deep(.el-form-item) {
     margin-right: 0;
     margin-bottom: 10px;
   }
-  
+
   .students-stats :deep(.el-row) {
     flex-direction: column;
   }
