@@ -45,7 +45,7 @@
         <el-table-column label="活动信息" min-width="250">
           <template #default="{ row }">
             <div class="activity-info">
-              <img :src="'http://117.72.85.204'+row.coverImage" alt="活动海报" class="activity-poster" />
+              <img :src="'http://117.72.85.204' + row.coverImage" alt="活动海报" class="activity-poster" />
               <div class="activity-details">
                 <div class="activity-name">{{ row.title }}</div>
                 <div class="activity-theme">{{ row.content }}</div>
@@ -62,10 +62,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="startTime" label="开始时间" width="150" />
-        <el-table-column prop="duration" label="时长" width="80" />
-        <el-table-column prop="maxParticipants" label="限制人数" width="100" />
-        <el-table-column prop="registeredCount" label="已报名" width="80" />
-        <el-table-column prop="attendedCount" label="实际参与" width="100" />
+        <el-table-column prop="fee" label="费用" width="80" />
+        <el-table-column prop="quota" label="限制人数" width="100" />
+        <el-table-column prop="auditStatusText" label="审核状态" width="100" />
+        <el-table-column prop="enrolledCount" label="已报名" width="80" />
+        <!-- <el-table-column prop="attendedCount" label="实际参与" width="100" /> -->
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
             <el-tag :type="getStatusType(row.status) || 'primary'"> {{ getStatusName(row.status) }} </el-tag>
@@ -73,9 +74,10 @@
         </el-table-column>
         <el-table-column label="操作" width="250" fixed="right">
           <template #default="{ row }">
-            <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
-            <el-button type="info" size="small" @click="handleViewParticipants(row)">参与者</el-button>
-            <el-button type="success" size="small" @click="handleNotify(row)">通知</el-button>
+            <!-- <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button> -->
+            <el-button v-if="row.auditStatusText !== '已审核'" type="primary" size="small" @click="handleApprove(row)">审核</el-button>
+            <!-- <el-button type="info" size="small" @click="handleViewParticipants(row)">参与者</el-button> -->
+            <!-- <el-button type="success" size="small" @click="handleNotify(row)">通知</el-button> -->
             <el-button v-if="row.status === 'registering'" type="warning" size="small"
               @click="handleCancel(row)">取消</el-button>
             <el-button type="danger" size="small" @click="handleDelete(row)">删除</el-button>
@@ -489,6 +491,16 @@ const handleAdd = () => {
   })
   dialogVisible.value = true
 }
+const handleApprove = (row: any) => {
+  eventApi.auditEvent(row.id, {
+    auditStatus: 2
+  }).then(res => {
+    // newProject.value = res.data
+    ElMessage.success('审核通过')
+    getevent()
+  })
+
+}
 
 const handleEdit = (row: any) => {
   dialogTitle.value = '编辑活动'
@@ -522,17 +534,18 @@ const handleCancel = async (row: any) => {
 
 const handleDelete = async (row: any) => {
   try {
-    await ElMessageBox.confirm('确认删除该活动吗？', '提示', {
+    ElMessageBox.confirm('确认删除该活动吗？', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
+    }).then(() => {
+      eventApi.deleteEvent(row.id).then(res => {
+        if (res.data.code === 200) {
+          ElMessage.success('删除成功')
+          getevent()
+        }
+      })
     })
-
-    const index = tableData.value.findIndex(item => item.id === row.id)
-    if (index > -1) {
-      tableData.value.splice(index, 1)
-    }
-    ElMessage.success('删除成功')
   } catch {
     // 用户取消
   }

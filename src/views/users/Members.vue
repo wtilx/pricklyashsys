@@ -64,9 +64,9 @@
 
       <!-- 数据表格 -->
       <el-table :data="tableData" v-loading="loading" stripe>
-        <el-table-column type="selection" width="55" />
-        <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column label="用户信息" min-width="200">
+        <el-table-column type="selection" />
+        <!-- <el-table-column prop="id" label="ID"  width="55" /> -->
+        <el-table-column label="用户信息" >
           <template #default="{ row }">
             <div class="user-info">
               <el-avatar :src="'http://117.72.85.204' + row.avatar" :size="40" />
@@ -77,25 +77,24 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="nickname" label="匿名" width="180" show-overflow-tooltip />
-        <el-table-column prop="createTime" label="注册时间" width="180" show-overflow-tooltip />
-        <el-table-column prop="level" label="性别" width="120">
+        <el-table-column prop="nickname" label="匿名"  show-overflow-tooltip />
+        <el-table-column prop="createTime" label="注册时间"  show-overflow-tooltip />
+        <el-table-column prop="level" label="性别" >
           <template #default="{ row }">
             {{ row.sex === 1 ? '男' : '女' }}
           </template>
         </el-table-column>
-        <el-table-column prop="integral" label="积分" width="80" />
+        <el-table-column prop="integral" label="积分"  />
         <!-- <el-table-column prop="loginCount" label="登录次数" width="100" />
         <el-table-column prop="lastLogin" label="最后登录" width="150" /> -->
-        <el-table-column prop="status" label="状态" width="100">
+        <el-table-column prop="status" label="状态" >
           <template #default="{ row }">
             <el-tag :type="getStatusType(row.status) || 'primary'">
               {{ getStatusName(row.status) }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="registerTime" label="注册时间" width="150" />
-        <el-table-column label="操作" width="200" fixed="right">
+        <!-- <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
             <el-button :type="row.status === 'active' ? 'warning' : 'success'" size="small"
@@ -104,7 +103,7 @@
             </el-button>
             <el-button type="info" size="small" @click="handleViewDetails(row)">详情</el-button>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
 
       <!-- 分页 -->
