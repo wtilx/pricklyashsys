@@ -105,9 +105,9 @@
         <el-table-column prop="createTime" label="创建时间" width="150" />
         <el-table-column label="操作" width="280" fixed="right">
           <template #default="{ row }">
-            <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
-            <el-button type="info" size="small" @click="handleViewContent(row)">内容</el-button>
-            <el-button type="success" size="small" @click="handleViewStudents(row)">学员</el-button>
+            <!-- <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button> -->
+            <!-- <el-button type="info" size="small" @click="handleViewContent(row)">内容</el-button>
+            <el-button type="success" size="small" @click="handleViewStudents(row)">学员</el-button> -->
             <el-button v-if="row.auditStatus === 0" type="warning" size="small" @click="handleAudit(row)">
               审核
             </el-button>
@@ -584,16 +584,20 @@ const handleViewStudents = (row: any) => {
   studentsDialogVisible.value = true
 }
 
-const handleAudit = async (row: any) => {
+const handleAudit = (row: any) => {
   try {
-    await ElMessageBox.confirm('确认审核通过该课程吗？', '提示', {
+    ElMessageBox.confirm('确认审核通过该课程吗？', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
+    }).then(() => {
+      courseApi.auditCourse(row.id, {
+        auditStatus: 2
+      }).then(res => {
+        getCourseList()
+      })
+      ElMessage.success('审核通过')
     })
-
-    row.status = 'published'
-    ElMessage.success('审核通过')
   } catch {
     // 用户取消
   }
