@@ -277,9 +277,9 @@ export const advertisementApi = {
 }
 // /api/front/admin/cs/message/send/{sessionId}
 export const csApi = {
-  // 客服发送消息
+  // 客服发送消息/${data.sessionId}
   sendMessage(data) {
-    return request.post(`/api/front/admin/cs/message/send/${data.sessionId}`, data)
+    return request.post(`/api/front/admin/cs/message/send`, data)
   },
   //会话消息列表 /api/front/admin/cs/message/list
   getMessageList(params) {

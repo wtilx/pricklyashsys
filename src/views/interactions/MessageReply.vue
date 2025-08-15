@@ -81,11 +81,15 @@ import serviceAvatar from '../../assets/headset.png'
 import userAvatar from '../../assets/user.png'
 import { csApi } from '@/api'
 onMounted(() => {
-  csApi.getMessageList({sessionId: 1}).then(res => {
+ getMessageList(1)
+
+})
+const getMessageList = (id) => {
+  csApi.getMessageList({sessionId: id}).then(res => {
     console.log(res.data.data.list);
     messages.value = res.data.data.list
   })
-})
+}
 
 // 响应式数据
 const messages = ref([
@@ -125,26 +129,31 @@ const quickReplies = ref([
 // 方法
 const sendMessage = () => {
   if (!newMessage.value.trim()) return
-
-  const message = {
-    id: Date.now(),
-    type: 'service',
-    content: newMessage.value.trim(),
-    timestamp: new Date()
-  }
-
-  messages.value.push(message)
-  newMessage.value = ''
-  
-  // 滚动到底部
-  nextTick(() => {
-    scrollToBottom()
+  csApi.sendMessage({
+    content: newMessage.value.trim()
+  }).then(res => {
+    getMessageList(res.data)
   })
 
-  // 模拟用户回复
-  setTimeout(() => {
-    simulateUserReply()
-  }, 2000)
+  // const message = {
+  //   id: Date.now(),
+  //   type: 'service',
+  //   content: newMessage.value.trim(),
+  //   timestamp: new Date()
+  // }
+
+  // messages.value.push(message)
+  // newMessage.value = ''
+  
+  // // 滚动到底部
+  // nextTick(() => {
+  //   scrollToBottom()
+  // })
+
+  // // 模拟用户回复
+  // setTimeout(() => {
+  //   simulateUserReply()
+  // }, 2000)
 }
 
 const handleEnterKey = (event) => {
