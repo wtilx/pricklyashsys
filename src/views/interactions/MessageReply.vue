@@ -86,7 +86,6 @@ onMounted(() => {
 })
 const getMessageList = (id) => {
   csApi.getMessageList({sessionId: id}).then(res => {
-    console.log(res.data.data.list);
     messages.value = res.data.data.list
   })
 }
