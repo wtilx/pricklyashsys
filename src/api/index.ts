@@ -248,7 +248,6 @@ export const courseApi = {
   getCourseDetail(id) {
     return request.get(`/api/front/course/detail?id=${id}`)
   },
-
 }
 // 广告相关 API
 export const advertisementApi = {
@@ -256,7 +255,6 @@ export const advertisementApi = {
   getAdvertisements(params) {
     return request.get(`/api/front/advertisement/list?limit=${params.limit}&page=${params.page}`)
   },
-
   //广告位详情 /api/front/advertisement/detail/{id}
   getAdvertisementDetail(id) {
     return request.get(`/api/front/advertisement/detail/${id}`)
@@ -273,7 +271,6 @@ export const advertisementApi = {
   deleteAdvertisement(id) {
     return request.delete(`/api/front/advertisement/delete/${id}`)
   }
-
 }
 // /api/front/admin/cs/message/send/{sessionId}
 export const csApi = {

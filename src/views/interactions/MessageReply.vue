@@ -23,12 +23,10 @@
           v-for="message in messages" 
           :key="message.id"
           :class="['message', message.senderType === '1' ? 'service' : 'user']"
-
         >
           <div class="message-avatar">
             <img 
               :src="message.senderType === '1' ? serviceAvatar : userAvatar" 
-
               :alt="message.senderType === '1' ? '客服头像' : '用户头像'"
             />
           </div>
