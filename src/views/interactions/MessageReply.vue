@@ -82,8 +82,8 @@ import userAvatar from '../../assets/user.png'
 import { csApi } from '@/api'
 onMounted(() => {
  getMessageList(1)
-
 })
+
 const getMessageList = (id) => {
   csApi.getMessageList({sessionId: id}).then(res => {
     messages.value = res.data.data.list
