@@ -102,11 +102,18 @@ const router = createRouter({
               meta: { title: '法律咨询', icon: 'Service' }
             },
             {
-              path: '/interactionsqa',
+              path: '/interactions/qa',
               name: 'QA',
               component: () => import('../views/interactions/QA.vue'),
               meta: { title: '互助问答', icon: 'QuestionFilled' }
-            }
+            },
+            {
+              path: '/interactions/message',
+              name: 'Message',
+              component: () => import('../views/interactions/MessageReply.vue'),
+              meta: { title: '消息管理', icon: 'Message' }
+            },
+
           ]
         },
         {

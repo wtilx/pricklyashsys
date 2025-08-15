@@ -275,3 +275,30 @@ export const advertisementApi = {
   }
 
 }
+// /api/front/admin/cs/message/send/{sessionId}
+export const csApi = {
+  // 客服发送消息
+  sendMessage(data) {
+    return request.post(`/api/front/admin/cs/message/send/${data.sessionId}`, data)
+  },
+  //会话消息列表 /api/front/admin/cs/message/list
+  getMessageList(params) {
+    return request.get(`/api/front/admin/cs/message/list?${qs.stringify(params)}`)
+  },
+  // 关闭会话/api/front/admin/cs/session/close/{sessionId}
+  closeSession(sessionId) {
+    return request.post(`/api/front/admin/cs/session/close/${sessionId}`)
+  },
+  //我负责的会话列表 /api/front/admin/cs/session/my
+  getMySessionList(params) {
+    return request.get(`/api/front/admin/cs/session/my?${qs.stringify(params)}`)
+  },
+  //待接入会话列表 /api/front/admin/cs/session/pending
+  getPendingSessionList(params) {
+    return request.get(`/api/front/admin/cs/session/pending?${qs.stringify(params)}`)
+  },
+
+
+
+
+}
