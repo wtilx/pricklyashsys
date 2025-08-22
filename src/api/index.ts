@@ -177,8 +177,8 @@ export const topicApi = {
     return request.post('/api/front/topic/create', data)
   },
   // 更新话题
-  updateTopic(id) {
-    return request.post(`/api/front/topic/update/${id}`)
+  updateTopic(id,data) {
+    return request.post(`/api/front/topic/update/${id}`,data)
   },
   // 删除话题
   deleteTopic(id) {

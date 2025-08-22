@@ -77,14 +77,14 @@
         <el-table-column label="操作" width="220" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
-            <el-button 
+            <!-- <el-button 
               :type="row.status === 'pinned' ? 'warning' : 'success'" 
               size="small" 
               @click="handlePin(row)"
             >
               {{ row.status === 'pinned' ? '取消置顶' : '置顶' }}
-            </el-button>
-            <el-button type="info" size="small" @click="handleManageReplies(row)">管理回复</el-button>
+            </el-button> -->
+            <!-- <el-button type="info" size="small" @click="handleManageReplies(row)">管理回复</el-button> -->
             <el-button type="danger" size="small" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -129,7 +129,7 @@
             <el-option label="实务经验" value="实务经验" />
           </el-select>
         </el-form-item> -->
-        <el-form-item label="话题描述" prop="description">
+        <el-form-item label="话题描述" prop="content">
           <el-input
             v-model="form.content"
             type="textarea"
@@ -232,7 +232,7 @@ const form = reactive({
 const rules = {
   title: [{ required: true, message: '请输入话题标题', trigger: 'blur' }],
   category: [{ required: true, message: '请选择分类', trigger: 'change' }],
-  description: [{ required: true, message: '请输入话题描述', trigger: 'blur' }]
+  content: [{ required: true, message: '请输入话题描述', trigger: 'blur' }]
 }
 
 const pagination = reactive({
@@ -465,25 +465,39 @@ const handleSubmit = async () => {
   await formRef.value.validate((valid) => {
     if (valid) {
       if (form.id) {
-        const index = tableData.value.findIndex(item => item.id === form.id)
-        if (index > -1) {
-          Object.assign(tableData.value[index], { ...form })
-        }
-        ElMessage.success('更新成功')
+        topicApi.updateTopic(form.id,form).then(() => {
+          ElMessage.success('更新成功')
+          getTopics()
+        }).catch(() => {
+          ElMessage.error('更新失败')
+        })
       } else {
-        const newItem = {
-          ...form,
-          id: Date.now(),
-          creator: '当前用户',
-          participants: 0,
-          replies: 0,
-          views: 0,
-          heat: 'normal',
-          createTime: new Date().toLocaleString().slice(0, -3)
-        }
-        tableData.value.unshift(newItem)
-        ElMessage.success('创建成功')
+        topicApi.createTopic(form).then(() => {
+          ElMessage.success('创建成功')
+           getTopics()
+        })
       }
+
+      // if (form.id) {
+      //   const index = tableData.value.findIndex(item => item.id === form.id)
+      //   if (index > -1) {
+      //     Object.assign(tableData.value[index], { ...form })
+      //   }
+      //   ElMessage.success('更新成功')
+      // } else {
+      //   const newItem = {
+      //     ...form,
+      //     id: Date.now(),
+      //     creator: '当前用户',
+      //     participants: 0,
+      //     replies: 0,
+      //     views: 0,
+      //     heat: 'normal',
+      //     createTime: new Date().toLocaleString().slice(0, -3)
+      //   }
+      //   tableData.value.unshift(newItem)
+      //   ElMessage.success('创建成功')
+      // }
       dialogVisible.value = false
     }
   })
