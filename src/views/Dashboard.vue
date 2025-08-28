@@ -16,7 +16,7 @@
           <div class="stat-trend">
             <span :class="['trend', stat.trend > 0 ? 'up' : 'down']">
               <el-icon><component :is="stat.trend > 0 ? 'TrendCharts' : 'Bottom'" /></el-icon>
-              {{ Math.abs(stat.trend) }}%
+              {{ Math.abs(stat.trend).toFixed(2) }}%
             </span>
             <span class="trend-text">较上月</span>
           </div>
