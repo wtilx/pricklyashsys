@@ -4,7 +4,7 @@
     <div class="header">
       <div class="header-info">
         <div class="avatar">
-          <img src="" alt="客服头像" />
+          <img src="../../assets/headset.png" alt="客服头像" />
         </div>
         <div class="info">
           <h3>在线客服</h3>
@@ -22,18 +22,18 @@
         <div 
           v-for="message in messages" 
           :key="message.id"
-          :class="['message', message.senderType === '1' ? 'service' : 'user']"
+          :class="['message', message.senderType == '1' ? 'service' : 'user']"
         >
           <div class="message-avatar">
             <img 
-              :src="message.senderType === '1' ? serviceAvatar : userAvatar" 
-              :alt="message.senderType === '1' ? '客服头像' : '用户头像'"
+              :src="message.senderType == '1' ? serviceAvatar : userAvatar" 
+              :alt="message.senderType == '1' ? '客服头像' : '用户头像'"
             />
           </div>
           <div class="message-content">
             <div class="message-info">
               <span class="sender">{{ message.senderType === '1' ? '客服小助手' : '' }}</span>
-              <span class="time">{{ formatTime(message.timestamp) }}</span>
+              <span class="time">{{ formatTime(message.createTime) }}</span>
             </div>
             <div class="message-text">{{ message.content }}</div>
           </div>
@@ -78,15 +78,6 @@ import { ref, nextTick, onMounted } from 'vue'
 import serviceAvatar from '../../assets/headset.png'
 import userAvatar from '../../assets/user.png'
 import { csApi } from '@/api'
-onMounted(() => {
- getMessageList(1)
-})
-
-const getMessageList = (id) => {
-  csApi.getMessageList({sessionId: id}).then(res => {
-    messages.value = res.data.data.list
-  })
-}
 
 // 响应式数据
 const messages = ref([
@@ -110,6 +101,18 @@ const messages = ref([
   }
 ])
 
+onMounted(() => {
+ getMessageList(1)
+})
+
+const getMessageList = (id) => {
+  csApi.getMessageList({sessionId: id}).then(res => {
+    messages.value = res.data.data.list
+  })
+}
+
+
+
 const newMessage = ref('')
 const isOnline = ref(true)
 const messagesContainer = ref(null)
@@ -126,10 +129,10 @@ const quickReplies = ref([
 // 方法
 const sendMessage = () => {
   if (!newMessage.value.trim()) return
-  csApi.sendMessage({
+  csApi.sendMessage(1,{
     content: newMessage.value.trim()
   }).then(res => {
-    getMessageList(res.data)
+    getMessageList(1)
   })
 
   // const message = {
