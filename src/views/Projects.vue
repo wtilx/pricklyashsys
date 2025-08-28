@@ -104,14 +104,12 @@
             <!-- <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button> -->
             <el-button type="info" size="small" @click="handleViewProgress(row)">进度</el-button>
             <el-button type="success" size="small" @click="handleManageParticipants(row)">成员</el-button>
-       
               <el-button v-if="row.status === 1" type="warning" size="small" @click="handlePause(row)">
                 暂停
               </el-button>
               <el-button v-else-if="row.status === 0" type="primary" size="small" @click="handleResume(row)">
                 开始
               </el-button>
-           
             <el-button type="danger" size="small" @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
