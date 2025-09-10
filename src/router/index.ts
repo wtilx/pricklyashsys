@@ -95,18 +95,18 @@ const router = createRouter({
           name: 'Interactions',
           meta: { title: '互动管理', icon: 'ChatLineRound' },
           children: [
-            {
-              path: '/interactions/consultations',
-              name: 'Consultations',
-              component: () => import('../views/interactions/Consultations.vue'),
-              meta: { title: '法律咨询', icon: 'Service' }
-            },
-            {
-              path: '/interactions/qa',
-              name: 'QA',
-              component: () => import('../views/interactions/QA.vue'),
-              meta: { title: '互助问答', icon: 'QuestionFilled' }
-            },
+            // {
+            //   path: '/interactions/consultations',
+            //   name: 'Consultations',
+            //   component: () => import('../views/interactions/Consultations.vue'),
+            //   meta: { title: '法律咨询', icon: 'Service' }
+            // },
+            // {
+            //   path: '/interactions/qa',
+            //   name: 'QA',
+            //   component: () => import('../views/interactions/QA.vue'),
+            //   meta: { title: '互助问答', icon: 'QuestionFilled' }
+            // },
             {
               path: '/interactions/message',
               name: 'Message',

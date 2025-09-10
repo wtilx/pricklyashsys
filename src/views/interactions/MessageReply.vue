@@ -1,71 +1,73 @@
 <template>
-  <div class="customer-service-container">
-    <!-- 头部 -->
-    <div class="header">
-      <div class="header-info">
+  <div style="display: flex;">
+    <div class="user-list">
+      <div v-for="user in userlist" :key="user.id" class="user-item" @click="handleUserClick(user)"
+        :class="{ 'active-user': selectedUser === user.id }">
         <div class="avatar">
-          <img src="../../assets/headset.png" alt="客服头像" />
+          <img :src="'http://117.72.85.204' + user.user.avatar" alt="用户头像" />
         </div>
         <div class="info">
-          <h3>在线客服</h3>
-          <span class="status">{{ isOnline ? '在线' : '离线' }}</span>
+          <h3>{{ user.user.account }}</h3>
+          <span class="status">{{ user.status == 0 ? '进行中' : '已关闭' }}</span>
         </div>
-      </div>
-      <div class="actions">
-        <button @click="clearMessages" class="clear-btn">清空对话</button>
       </div>
     </div>
 
-    <!-- 消息列表 -->
-    <div class="messages-container" ref="messagesContainer">
-      <div class="messages-list">
-        <div 
-          v-for="message in messages" 
-          :key="message.id"
-          :class="['message', message.senderType == '1' ? 'service' : 'user']"
-        >
-          <div class="message-avatar">
-            <img 
-              :src="message.senderType == '1' ? serviceAvatar : userAvatar" 
-              :alt="message.senderType == '1' ? '客服头像' : '用户头像'"
-            />
+    <div class="customer-service-container">
+
+      <!-- 头部 -->
+      <div class="header">
+        <div class="header-info">
+          <div class="avatar">
+            <img src="../../assets/headset.png" alt="客服头像" />
           </div>
-          <div class="message-content">
-            <div class="message-info">
-              <span class="sender">{{ message.senderType === '1' ? '客服小助手' : '' }}</span>
-              <span class="time">{{ formatTime(message.createTime) }}</span>
+          <div class="info">
+            <h3>在线客服</h3>
+            <span class="status">{{ isOnline ? '在线' : '离线' }}</span>
+          </div>
+        </div>
+        <div class="actions">
+          <button @click="clearMessages" class="clear-btn">清空对话</button>
+        </div>
+      </div>
+
+      <!-- 消息列表 -->
+      <div class="messages-container" ref="messagesContainer">
+        <div class="messages-list">
+          <div v-for="message in messages" :key="message.id"
+            :class="['message', message.senderType == '1' ? 'service' : 'user']">
+            <div class="message-avatar">
+              <img :src="message.senderType == '1' ? serviceAvatar : userAvatar"
+                :alt="message.senderType == '1' ? '客服头像' : '用户头像'" />
             </div>
-            <div class="message-text">{{ message.content }}</div>
+            <div class="message-content">
+              <div class="message-info">
+                <span class="sender">{{ message.senderType === '1' ? '客服小助手' : '' }}</span>
+                <span class="time">{{ formatTime(message.createTime) }}</span>
+              </div>
+              <div class="message-text">{{ message.content }}</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- 输入区域 -->
-    <div class="input-area">
-      <div class="input-container">
-        <textarea
-          v-model="newMessage"
-          @keydown.enter.prevent="handleEnterKey"
-          placeholder="请输入回复内容..."
-          class="message-input"
-          rows="3"
-        ></textarea>
-        <div class="input-actions">
-          <div class="quick-replies">
-            <button 
-              v-for="reply in quickReplies" 
-              :key="reply"
-              @click="insertQuickReply(reply)"
-              class="quick-reply-btn"
-            >
-              {{ reply }}
-            </button>
-          </div>
-          <div class="send-area">
-            <button @click="sendMessage" :disabled="!newMessage.trim()" class="send-btn">
-              发送
-            </button>
+      <!-- 输入区域 -->
+      <div class="input-area">
+        <div class="input-container">
+          <textarea v-model="newMessage" @keydown.enter.prevent="handleEnterKey" placeholder="请输入回复内容..."
+            class="message-input" rows="3"></textarea>
+          <div class="input-actions">
+            <div class="quick-replies">
+              <button v-for="reply in quickReplies" :key="reply" @click="insertQuickReply(reply)"
+                class="quick-reply-btn">
+                {{ reply }}
+              </button>
+            </div>
+            <div class="send-area">
+              <button @click="sendMessage" :disabled="!newMessage.trim()" class="send-btn">
+                发送
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -79,6 +81,8 @@ import serviceAvatar from '../../assets/headset.png'
 import userAvatar from '../../assets/user.png'
 import { csApi } from '@/api'
 
+const userlist = ref([])
+const selectedUser = ref(null)
 // 响应式数据
 const messages = ref([
   {
@@ -102,11 +106,21 @@ const messages = ref([
 ])
 
 onMounted(() => {
- getMessageList(1)
+  csApi.getPendingSessionList().then(res => {
+    console.log('待接入会话列表', res)
+    userlist.value = res.data.data.list
+  })
+  // getMessageList(1)
+  nextTick(() => {
+    scrollToBottom()
+  })
 })
-
+const handleUserClick = (user) => {
+  selectedUser.value = user.id
+  getMessageList(user.id)
+}
 const getMessageList = (id) => {
-  csApi.getMessageList({sessionId: id}).then(res => {
+  csApi.getMessageList({ sessionId: id }).then(res => {
     messages.value = res.data.data.list
   })
 }
@@ -129,7 +143,7 @@ const quickReplies = ref([
 // 方法
 const sendMessage = () => {
   if (!newMessage.value.trim()) return
-  csApi.sendMessage(1,{
+  csApi.sendMessage(1, {
     content: newMessage.value.trim()
   }).then(res => {
     getMessageList(1)
@@ -144,7 +158,7 @@ const sendMessage = () => {
 
   // messages.value.push(message)
   // newMessage.value = ''
-  
+
   // // 滚动到底部
   // nextTick(() => {
   //   scrollToBottom()
@@ -180,11 +194,11 @@ const formatTime = (timestamp) => {
   const now = new Date()
   const messageTime = new Date(timestamp)
   const diffInMinutes = Math.floor((now - messageTime) / (1000 * 60))
-  
+
   if (diffInMinutes < 1) return '刚刚'
   if (diffInMinutes < 60) return `${diffInMinutes}分钟前`
   if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}小时前`
-  
+
   return messageTime.toLocaleDateString() + ' ' + messageTime.toLocaleTimeString().slice(0, 5)
 }
 
@@ -202,29 +216,22 @@ const simulateUserReply = () => {
     '这个解答很有帮助',
     '请问还有优惠活动吗？'
   ]
-  
+
   const randomReply = userReplies[Math.floor(Math.random() * userReplies.length)]
-  
+
   const userMessage = {
     id: Date.now(),
     type: 'user',
     content: randomReply,
     timestamp: new Date()
   }
-  
+
   messages.value.push(userMessage)
-  
+
   nextTick(() => {
     scrollToBottom()
   })
 }
-
-// 组件挂载时滚动到底部
-onMounted(() => {
-  nextTick(() => {
-    scrollToBottom()
-  })
-})
 </script>
 
 <style scoped>
@@ -233,11 +240,15 @@ onMounted(() => {
   flex-direction: column;
   height: 100vh;
   max-width: 800px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   background: #f5f5f5;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.user-list{
+  width: 200px;
 }
 
 .header {
@@ -463,24 +474,46 @@ onMounted(() => {
     height: 100vh;
     border-radius: 0;
   }
-  
+
   .message-content {
     max-width: 85%;
   }
-  
+
   .quick-replies {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .input-actions {
     flex-direction: column;
     gap: 12px;
     align-items: stretch;
   }
-  
+
   .send-area {
     justify-content: flex-end;
   }
+}
+
+.user-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #f5f5f5;
+
+}
+
+.user-item:hover {
+  background-color: #e8e8e8;
+  transform: translateY(-2px);
+}
+
+.user-item:active {
+  background-color: #d9d9d9;
+  transform: translateY(0);
+}
+
+.active-user {
+  background-color: #abd6ff;
+  color: white;
 }
 </style>
